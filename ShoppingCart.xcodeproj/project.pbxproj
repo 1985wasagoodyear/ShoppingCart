@@ -15,6 +15,12 @@
 		3F7E12C921E78100003923F2 /* ShoppingCartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7E12C821E78100003923F2 /* ShoppingCartViewController.swift */; };
 		3F7E12CF21E7817D003923F2 /* ShoppingCart.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3F7E12CD21E7817D003923F2 /* ShoppingCart.xcdatamodeld */; };
 		3F7E12F221E78876003923F2 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 3F7E12F121E78876003923F2 /* README.md */; };
+		3F7E12FA21E78CDC003923F2 /* Cart+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7E12F621E78CDC003923F2 /* Cart+CoreDataClass.swift */; };
+		3F7E12FB21E78CDC003923F2 /* Cart+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7E12F721E78CDC003923F2 /* Cart+CoreDataProperties.swift */; };
+		3F7E12FC21E78CDC003923F2 /* Product+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7E12F821E78CDC003923F2 /* Product+CoreDataClass.swift */; };
+		3F7E12FD21E78CDC003923F2 /* Product+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7E12F921E78CDC003923F2 /* Product+CoreDataProperties.swift */; };
+		3F7E12FF21E78D28003923F2 /* ServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7E12FE21E78D28003923F2 /* ServiceManager.swift */; };
+		3F7E130121E78D33003923F2 /* ProduceServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7E130021E78D33003923F2 /* ProduceServiceFactory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +35,12 @@
 		3F7E12CE21E7817D003923F2 /* SignedInTunes.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SignedInTunes.xcdatamodel; sourceTree = "<group>"; };
 		3F7E12D021E781BB003923F2 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		3F7E12F121E78876003923F2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		3F7E12F621E78CDC003923F2 /* Cart+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cart+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3F7E12F721E78CDC003923F2 /* Cart+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cart+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3F7E12F821E78CDC003923F2 /* Product+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Product+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3F7E12F921E78CDC003923F2 /* Product+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Product+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3F7E12FE21E78D28003923F2 /* ServiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceManager.swift; sourceTree = "<group>"; };
+		3F7E130021E78D33003923F2 /* ProduceServiceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProduceServiceFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +74,8 @@
 		3F08D86F21E6B44E00919E42 /* ShoppingCart */ = {
 			isa = PBXGroup;
 			children = (
-				3F7E12CC21E7816C003923F2 /* Resources */,
+				3F7E12F321E78CAF003923F2 /* Model */,
+				3F7E130221E78D3E003923F2 /* Service */,
 				3F7E12CB21E78167003923F2 /* Manager */,
 				3F7E12D221E782C4003923F2 /* ViewModel */,
 				3F7E12CA21E78122003923F2 /* ViewController */,
@@ -89,15 +102,9 @@
 			isa = PBXGroup;
 			children = (
 				3F7E12D021E781BB003923F2 /* CoreDataManager.swift */,
+				3F7E12FE21E78D28003923F2 /* ServiceManager.swift */,
 			);
 			path = Manager;
-			sourceTree = "<group>";
-		};
-		3F7E12CC21E7816C003923F2 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 		3F7E12D221E782C4003923F2 /* ViewModel */ = {
@@ -105,6 +112,41 @@
 			children = (
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		3F7E12F321E78CAF003923F2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3F7E12F421E78CB5003923F2 /* NSManagedObjects */,
+				3F7E12F521E78CBC003923F2 /* NSManagedObjects+Extensions */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		3F7E12F421E78CB5003923F2 /* NSManagedObjects */ = {
+			isa = PBXGroup;
+			children = (
+				3F7E12F621E78CDC003923F2 /* Cart+CoreDataClass.swift */,
+				3F7E12F721E78CDC003923F2 /* Cart+CoreDataProperties.swift */,
+				3F7E12F821E78CDC003923F2 /* Product+CoreDataClass.swift */,
+				3F7E12F921E78CDC003923F2 /* Product+CoreDataProperties.swift */,
+			);
+			path = NSManagedObjects;
+			sourceTree = "<group>";
+		};
+		3F7E12F521E78CBC003923F2 /* NSManagedObjects+Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "NSManagedObjects+Extensions";
+			sourceTree = "<group>";
+		};
+		3F7E130221E78D3E003923F2 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				3F7E130021E78D33003923F2 /* ProduceServiceFactory.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -179,10 +221,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F7E12FA21E78CDC003923F2 /* Cart+CoreDataClass.swift in Sources */,
 				3F08D87321E6B44F00919E42 /* ShoppingListViewController.swift in Sources */,
 				3F08D87121E6B44E00919E42 /* AppDelegate.swift in Sources */,
+				3F7E12FC21E78CDC003923F2 /* Product+CoreDataClass.swift in Sources */,
 				3F7E12CF21E7817D003923F2 /* ShoppingCart.xcdatamodeld in Sources */,
+				3F7E12FF21E78D28003923F2 /* ServiceManager.swift in Sources */,
 				3F7E12C921E78100003923F2 /* ShoppingCartViewController.swift in Sources */,
+				3F7E130121E78D33003923F2 /* ProduceServiceFactory.swift in Sources */,
+				3F7E12FD21E78CDC003923F2 /* Product+CoreDataProperties.swift in Sources */,
+				3F7E12FB21E78CDC003923F2 /* Cart+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
