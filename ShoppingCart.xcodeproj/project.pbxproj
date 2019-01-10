@@ -8,20 +8,27 @@
 
 /* Begin PBXBuildFile section */
 		3F08D87121E6B44E00919E42 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08D87021E6B44E00919E42 /* AppDelegate.swift */; };
-		3F08D87321E6B44F00919E42 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08D87221E6B44F00919E42 /* ViewController.swift */; };
+		3F08D87321E6B44F00919E42 /* ShoppingListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08D87221E6B44F00919E42 /* ShoppingListViewController.swift */; };
 		3F08D87621E6B44F00919E42 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F08D87421E6B44F00919E42 /* Main.storyboard */; };
 		3F08D87821E6B44F00919E42 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F08D87721E6B44F00919E42 /* Assets.xcassets */; };
 		3F08D87B21E6B44F00919E42 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F08D87921E6B44F00919E42 /* LaunchScreen.storyboard */; };
+		3F7E12C921E78100003923F2 /* ShoppingCartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7E12C821E78100003923F2 /* ShoppingCartViewController.swift */; };
+		3F7E12CF21E7817D003923F2 /* ShoppingCart.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3F7E12CD21E7817D003923F2 /* ShoppingCart.xcdatamodeld */; };
+		3F7E12F221E78876003923F2 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 3F7E12F121E78876003923F2 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3F08D86D21E6B44E00919E42 /* ShoppingCart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShoppingCart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F08D87021E6B44E00919E42 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3F08D87221E6B44F00919E42 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		3F08D87221E6B44F00919E42 /* ShoppingListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListViewController.swift; sourceTree = "<group>"; };
 		3F08D87521E6B44F00919E42 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3F08D87721E6B44F00919E42 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3F08D87A21E6B44F00919E42 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3F08D87C21E6B44F00919E42 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3F7E12C821E78100003923F2 /* ShoppingCartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingCartViewController.swift; sourceTree = "<group>"; };
+		3F7E12CE21E7817D003923F2 /* SignedInTunes.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SignedInTunes.xcdatamodel; sourceTree = "<group>"; };
+		3F7E12D021E781BB003923F2 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		3F7E12F121E78876003923F2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +45,7 @@
 		3F08D86421E6B44E00919E42 = {
 			isa = PBXGroup;
 			children = (
+				3F7E12F121E78876003923F2 /* README.md */,
 				3F08D86F21E6B44E00919E42 /* ShoppingCart */,
 				3F08D86E21E6B44E00919E42 /* Products */,
 			);
@@ -54,14 +62,49 @@
 		3F08D86F21E6B44E00919E42 /* ShoppingCart */ = {
 			isa = PBXGroup;
 			children = (
+				3F7E12CC21E7816C003923F2 /* Resources */,
+				3F7E12CB21E78167003923F2 /* Manager */,
+				3F7E12D221E782C4003923F2 /* ViewModel */,
+				3F7E12CA21E78122003923F2 /* ViewController */,
 				3F08D87021E6B44E00919E42 /* AppDelegate.swift */,
-				3F08D87221E6B44F00919E42 /* ViewController.swift */,
 				3F08D87421E6B44F00919E42 /* Main.storyboard */,
 				3F08D87721E6B44F00919E42 /* Assets.xcassets */,
 				3F08D87921E6B44F00919E42 /* LaunchScreen.storyboard */,
 				3F08D87C21E6B44F00919E42 /* Info.plist */,
+				3F7E12CD21E7817D003923F2 /* ShoppingCart.xcdatamodeld */,
 			);
 			path = ShoppingCart;
+			sourceTree = "<group>";
+		};
+		3F7E12CA21E78122003923F2 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				3F08D87221E6B44F00919E42 /* ShoppingListViewController.swift */,
+				3F7E12C821E78100003923F2 /* ShoppingCartViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		3F7E12CB21E78167003923F2 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				3F7E12D021E781BB003923F2 /* CoreDataManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		3F7E12CC21E7816C003923F2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		3F7E12D221E782C4003923F2 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -124,6 +167,7 @@
 			files = (
 				3F08D87B21E6B44F00919E42 /* LaunchScreen.storyboard in Resources */,
 				3F08D87821E6B44F00919E42 /* Assets.xcassets in Resources */,
+				3F7E12F221E78876003923F2 /* README.md in Resources */,
 				3F08D87621E6B44F00919E42 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -135,8 +179,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3F08D87321E6B44F00919E42 /* ViewController.swift in Sources */,
+				3F08D87321E6B44F00919E42 /* ShoppingListViewController.swift in Sources */,
 				3F08D87121E6B44E00919E42 /* AppDelegate.swift in Sources */,
+				3F7E12CF21E7817D003923F2 /* ShoppingCart.xcdatamodeld in Sources */,
+				3F7E12C921E78100003923F2 /* ShoppingCartViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,6 +380,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		3F7E12CD21E7817D003923F2 /* ShoppingCart.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				3F7E12CE21E7817D003923F2 /* SignedInTunes.xcdatamodel */,
+			);
+			currentVersion = 3F7E12CE21E7817D003923F2 /* SignedInTunes.xcdatamodel */;
+			path = ShoppingCart.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 3F08D86521E6B44E00919E42 /* Project object */;
 }

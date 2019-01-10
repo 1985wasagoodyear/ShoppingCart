@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ShoppingListViewController.swift
 //  ShoppingCart
 //
 //  Created by Kevin Yu on 1/9/19.
@@ -8,8 +8,10 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ShoppingListViewController: UIViewController {
 
+    @IBOutlet var collectionView: UICollectionView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
