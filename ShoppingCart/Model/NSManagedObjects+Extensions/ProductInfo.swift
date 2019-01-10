@@ -1,5 +1,5 @@
 //
-//  ProduceServiceFactory.swift
+//  ProductInfo.swift
 //  ShoppingCart
 //
 //  Created by Kevin Yu on 1/10/19.
@@ -8,6 +8,4 @@
 
 import Foundation
 
-class ProduceServiceFactory {
-    
-}
+typealias ProductInfo = (image: Data?, name: String, price: String, quantity: String)

@@ -14,56 +14,13 @@ import CoreData
 
 class CoreDataManager {
     
-    static let shared = CoreDataManager()
-    
-    
-    private init() {
+    init() {
         self.setupContexts()
-        // on startup, check if a Trainer exists
-        // determine to show the game if there is a player
-        let fetchRequest = NSFetchRequest<Trainer>(entityName: "Trainer")
-        do {
-            let result = try mainContext.fetch(fetchRequest)
-            if result.count > 0 {
-                self.trainer = result.first
-            }
-        }
-        catch { print("Error: \(error)") }
     }
-    
-    // MARK: External Core Data Accessors
-    
-    func trainerExists() -> Bool {
-        return !(self.trainer == nil)
-    }
-    
-    func deleteTrainer() {
-        self.mainContext.delete(self.trainer)
-        self.trainer = nil
-        self.saveContext()
-    }
-    
-    func trainerName() -> String {
-        return self.trainer.name!
-    }
-    
-    func trainerImage() -> Data {
-        return Data(referencing: self.trainer.image!)
-    }
-    
-    func currentPokemon() -> [CorePokemon] {
-        if let allPokemon = self.trainer.pokemon?.array as? [CorePokemon] {
-            return allPokemon
-        }
-        else {
-            return []
-        }
-    }
-    
     
     // MARK: - Core Data stack
     
-    private var backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+    var backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
     
     var mainContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
     
@@ -107,7 +64,7 @@ class CoreDataManager {
     
     // MARK: - Core Data Saving support
     
-    func saveContext() {
+    private func saveContext() {
         let context = self.mainContext
         if context.hasChanges {
             do {
@@ -122,7 +79,7 @@ class CoreDataManager {
         }
     }
     
-    func saveBackgroundContext() {
+    private func saveBackgroundContext() {
         let context = self.backgroundContext
         if context.hasChanges {
             do {
@@ -138,5 +95,6 @@ class CoreDataManager {
 }
 
 extension CoreDataManager {
+    // MARK: External Core Data Accessors
     
 }

@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Item-->
+        <!--Shopping-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController storyboardIdentifier="ShoppingListViewController" id="BYZ-38-t0r" customClass="ShoppingListViewController" customModule="ShoppingCart" customModuleProvider="target" sceneMemberID="viewController">
@@ -39,7 +39,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="h7M-M4-We1"/>
+                    <tabBarItem key="tabBarItem" title="Shopping" image="smallBag" id="h7M-M4-We1"/>
                     <connections>
                         <outlet property="collectionView" destination="rgN-Rt-TTC" id="2kh-gH-Kop"/>
                     </connections>
@@ -54,8 +54,11 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="8AA-as-wJO" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="nOa-LA-FSK">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="barTintColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="selectedImageTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="8h8-k8-ikG"/>
@@ -66,7 +69,7 @@
             </objects>
             <point key="canvasLocation" x="132" y="133.5832083958021"/>
         </scene>
-        <!--Item-->
+        <!--Checkout-->
         <scene sceneID="QZH-QZ-Zye">
             <objects>
                 <viewController storyboardIdentifier="ShoppingCartViewController" id="LSY-uc-bB2" customClass="ShoppingCartViewController" customModule="ShoppingCart" customModuleProvider="target" sceneMemberID="viewController">
@@ -88,7 +91,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="X9t-hb-Kgz"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="63k-9r-8zY"/>
+                    <tabBarItem key="tabBarItem" title="Checkout" image="cart" id="63k-9r-8zY"/>
                     <connections>
                         <outlet property="tableView" destination="kda-oQ-0QT" id="hWa-eh-HXg"/>
                     </connections>
@@ -98,4 +101,8 @@
             <point key="canvasLocation" x="1071" y="868"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="cart" width="25" height="25"/>
+        <image name="smallBag" width="25" height="25"/>
+    </resources>
 </document>

@@ -8,17 +8,27 @@
 
 import UIKit
 
-class ShoppingCartViewController: UIViewController {
+final class ShoppingCartViewController: UIViewController {
 
     @IBOutlet var tableView: UITableView!
+    
+    private var viewModel = ShoppingCartViewModel()
     
     // MARK: - Lifecycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setupTableView()
+
+    }
+    
+    func setupTableView() {
         self.tableView.delegate = self
         self.tableView.dataSource = self
-
+        let nib = UINib(nibName: ProductTableViewCell.name,
+                        bundle: nil)
+        self.tableView.register(nib,
+                                forCellReuseIdentifier: ProductTableViewCell.name)
     }
 
 
@@ -35,6 +45,10 @@ extension ShoppingCartViewController: UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: ProductTableViewCell.name, for: indexPath) as! ProductTableViewCell
+        
+        // setup
+        
+        return cell
     }
 }
