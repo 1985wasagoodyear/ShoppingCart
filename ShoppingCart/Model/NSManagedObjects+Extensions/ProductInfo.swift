@@ -8,4 +8,4 @@
 
 import Foundation
 
-typealias ProductInfo = (image: Data?, name: String, price: String, quantity: String)
+typealias ProductInfo = (image: Data?, name: String, price: String, totalPrice: String, quantity: String)

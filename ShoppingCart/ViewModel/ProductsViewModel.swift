@@ -1,5 +1,5 @@
 //
-//  AllProductsViewModel.swift
+//  ProductsViewModel.swift
 //  ShoppingCart
 //
 //  Created by Kevin Yu on 1/10/19.
@@ -10,9 +10,13 @@ import Foundation
 
 typealias ViewModelCallback = ()->()
 
-final class AllProductsViewModel {
+final class ProductsViewModel {
     
-    private var products = [Product]()
+    fileprivate var products = [Product]() {
+        didSet {
+            self.updateUI()
+        }
+    }
     
     private var updateUI: ViewModelCallback
     
@@ -20,35 +24,46 @@ final class AllProductsViewModel {
         return products.count
     }
     
-    private var service: ServiceManager!
+    fileprivate var service: ServiceManager!
+    fileprivate var coreData: CoreDataManager!
     
     // MARK: - Initialization
     
     init(callback: @escaping ViewModelCallback) {
-        self.service = ServiceManager(manager: CoreDataManager())
+        self.coreData = CoreDataManager()
+        self.service = ServiceManager(manager: coreData)
         self.updateUI = callback
     }
     
     init(manager: CoreDataManager,
          callback: @escaping ViewModelCallback) {
+        self.coreData = manager
         self.service = ServiceManager(manager: manager)
         self.updateUI = callback
     }
     
-    init(service: ServiceManager,
+    init(manager: CoreDataManager,
+         service: ServiceManager,
          callback: @escaping ViewModelCallback) {
+        self.coreData = manager
         self.service = service
         self.updateUI = callback
     }
+}
+
+// MARK: - Accessors and the like
+
+extension ProductsViewModel {
     
-    // MARK: -
+    func loadCart() {
+        self.products = self.service.fetchProductsFromCart()
+    }
     
     func loadProducts(_ success: @escaping ()->(),
                       _ failure: @escaping ()->()) {
         let productSuccess: ([Product])->() = { [weak self] products in
-            self?.products = products
             success()
-            self?.updateUI()
+            self?.products = products
         }
         self.service.fetchProducts(productSuccess, failure)
     }
@@ -57,13 +72,15 @@ final class AllProductsViewModel {
         let product = self.products[index]
         
         let imageData = (product.image != nil) ? Data(referencing: product.image!) : nil
-        let nameStr = product.name!
+        let nameStr = product.name
         let priceStr = String(format: "$%.02f", product.price)
+        let totalPrice = String(format: "$%.02f", product.price * Float(product.quantity))
         let quantityStr = String(product.quantity)
         
         return (image: imageData,
                 name: nameStr,
                 price: priceStr,
+                totalPrice: totalPrice,
                 quantity: quantityStr)
     }
     
@@ -71,7 +88,10 @@ final class AllProductsViewModel {
         let product = self.products[index]
         if product.image == nil {
             self.service.fetchImage(product) {
-                completion(Data(referencing: product.image!))
+                DispatchQueue.main.async {
+                    completion(Data(referencing: product.image!))
+                }
+                self.coreData.save()
             }
         }
         else {
@@ -80,18 +100,33 @@ final class AllProductsViewModel {
     }
 }
 
-extension AllProductsViewModel: ChangeCountProtocol {
+extension ProductsViewModel: ChangeCountProtocol {
+    
+    // need a way to avoid multiple fishes....
+    
     func incrementCount(_ index: Int) {
         let product = self.products[index]
         if product.quantity < 99 {
             product.quantity += 1
         }
+        
+        // create cart if necessary, add item to cart
+        if (self.products[index].cart == nil) {
+            self.products[index].cart = self.coreData.getShoppingCart()
+        }
+        self.coreData.save()
     }
     func decrementCount(_ index: Int) {
         let product = self.products[index]
         if product.quantity > 0 {
             product.quantity -= 1
         }
+        
+        // create cart if necessary, add item to cart
+        if (self.products[index].cart == nil) {
+            self.products[index].cart = self.coreData.getShoppingCart()
+        }
+        self.coreData.save()
     }
     
 }

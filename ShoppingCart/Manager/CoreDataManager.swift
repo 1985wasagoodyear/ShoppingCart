@@ -18,6 +18,29 @@ class CoreDataManager {
         self.setupContexts()
     }
     
+    
+    static func deleteAll() {
+        let manager = CoreDataManager()
+        let context = manager.mainContext
+        
+        let fetch1 = NSFetchRequest<Cart>(entityName: "Cart")
+        do {
+            let carts = try context.fetch(fetch1)
+            carts.forEach { context.delete($0) }
+        } catch {
+            print("Error fetching Cart from Persistent Store")
+        }
+        let fetch2 = NSFetchRequest<Product>(entityName: "Product")
+        do {
+            let products = try context.fetch(fetch2)
+            products.forEach { context.delete($0) }
+        } catch {
+            print("Error fetching Product from Persistent Store")
+        }
+        
+        manager.save()
+    }
+    
     // MARK: - Core Data stack
     
     var backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
@@ -30,32 +53,10 @@ class CoreDataManager {
         mainContext.parent = backgroundContext
     }
     
-    /*
-    lazy var mainContext: NSManagedObjectContext = {
-        return self.persistentContainer.viewContext
-    }()
-    */
     private lazy var persistentContainer: NSPersistentContainer = {
-        /*
-         The persistent container for the application. This implementation
-         creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
-         error conditions that could cause the creation of the store to fail.
-         */
         let container = NSPersistentContainer(name: "ShoppingCart")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
@@ -64,15 +65,16 @@ class CoreDataManager {
     
     // MARK: - Core Data Saving support
     
-    private func saveContext() {
+    func save() {
+        self.saveBackgroundContext()
+    }
+    
+    private func saveMainContext() {
         let context = self.mainContext
         if context.hasChanges {
             do {
                 try context.save()
-                self.saveBackgroundContext()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
@@ -82,19 +84,54 @@ class CoreDataManager {
     private func saveBackgroundContext() {
         let context = self.backgroundContext
         if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            context.performAndWait {
+                do {
+                    try context.save()
+                    self.saveMainContext()
+                } catch {
+                    let nserror = error as NSError
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                }
             }
         }
     }
 }
 
 extension CoreDataManager {
-    // MARK: External Core Data Accessors
+    
+    private func newCart(in context: NSManagedObjectContext) -> Cart {
+        let cart = Cart(context: context)
+        cart.date = NSDate()
+        self.save()
+        return cart
+    }
+    
+    func getShoppingCart() -> Cart {
+        let context = self.backgroundContext
+        let fetch = NSFetchRequest<Cart>(entityName: "Cart")
+        do {
+            if let cart = try context.fetch(fetch).first {
+                return cart
+            }
+        } catch {
+            print("Error fetching Cart from Persistent Store")
+        }
+        
+        return self.newCart(in: context)
+    }
+    
+    // MARK: External Core Data Accessors (?)
+    
+    func getProducts() -> [Product]? {
+        let context = self.backgroundContext
+        let fetch = NSFetchRequest<Product>(entityName: "Product")
+        do {
+            let products = try context.fetch(fetch)
+            return products
+        } catch {
+            print("Error fetching Product from Persistent Store")
+            return nil
+        }
+    }
     
 }

@@ -13,7 +13,7 @@ final class ShoppingListViewController: UIViewController {
     @IBOutlet private var collectionView: UICollectionView!
     private var loadingIndicator: UIActivityIndicatorView!
     
-    private var viewModel: AllProductsViewModel!
+    private var viewModel: ProductsViewModel!
     
     // MARK: - Lifecycle Methods
     
@@ -41,7 +41,7 @@ final class ShoppingListViewController: UIViewController {
                 self?.collectionView.reloadData()
             }
         }
-        self.viewModel = AllProductsViewModel(callback: callback)
+        self.viewModel = ProductsViewModel(callback: callback)
     }
 
     func loadProducts() {
@@ -85,16 +85,9 @@ extension ShoppingListViewController: UICollectionViewDataSource, UICollectionVi
                    delegate: self,
                    index: row)
         
-        if productInfo.image != nil {
-            cell.imageView.image = UIImage(data: productInfo.image!)
-        }
-        else {
-            cell.imageView.image = UIImage(named: "bag")
+        if productInfo.image == nil {
             self.viewModel.getImage(at: row) { [weak self] image in
-                DispatchQueue.main.async {
-                    cell.imageView.image = UIImage(data: image)
-                    self?.reloadCell(at: row)
-                }
+                self?.reloadCell(at: row)
             }
         }
         

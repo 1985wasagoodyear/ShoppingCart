@@ -18,7 +18,7 @@ extension Product {
     }
 
     @NSManaged public var image: NSData?
-    @NSManaged public var name: String?
+    @NSManaged public var name: String
     @NSManaged public var price: Float
     @NSManaged public var quantity: Int16
     @NSManaged public var cart: Cart?

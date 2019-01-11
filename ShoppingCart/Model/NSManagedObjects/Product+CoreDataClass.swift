@@ -27,15 +27,13 @@ public class Product: NSManagedObject, Decodable {
         guard let codingUserInfoKeyManagedObjectContext = CodingUserInfoKey.managedObjectContext,
             let managedObjectContext = decoder.userInfo[codingUserInfoKeyManagedObjectContext] as? NSManagedObjectContext,
             let entity = NSEntityDescription.entity(forEntityName: "Product", in: managedObjectContext) else {
-                print("error")
-                self.init()
-                return
+                fatalError("ManagedObjectContext could not be found")
         }
         
         self.init(entity: entity, insertInto: managedObjectContext)
         
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.decodeIfPresent(String.self, forKey: .name)
+        self.name = try container.decodeIfPresent(String.self, forKey: .name) ?? "Bag"
         self.price = try container.decodeIfPresent(Float.self, forKey: .price) ?? 0.0
         self.quantity = 0
         self.image = nil

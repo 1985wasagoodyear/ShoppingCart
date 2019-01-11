@@ -35,7 +35,12 @@ class ProductCollectionViewCell: UICollectionViewCell {
     }
     
     func setup(info: ProductInfo, delegate: ChangeCountProtocol?, index: Int) {
-        self.imageView.image = UIImage(named: "cheese") // UIImage(data: info.image)
+        if let imageData = info.image {
+            self.imageView.image = UIImage(data: imageData)
+        }
+        else {
+            self.imageView.image = UIImage(named: "bag")
+        }
         self.priceLabel.text = info.price + " (" + info.quantity + ")"
         
         self.delegate = delegate
