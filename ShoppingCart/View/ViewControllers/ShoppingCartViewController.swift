@@ -24,7 +24,7 @@ final class ShoppingCartViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.viewModel.loadCart()
+        self.viewModel.loadFromCart()
     }
     
     // MARK: - Setup Methods

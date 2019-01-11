@@ -33,8 +33,8 @@ class ServiceManager {
                 failure()
                 return
             }
-            success(products)
-            return
+           // success(products)
+            //return
             
             // upon completion of downloading:
             
@@ -43,18 +43,23 @@ class ServiceManager {
             // and return the union
             if var savedProducts = self.manager.getProducts() {
                 var prodDict = [String:Int16]()
-                for product in products {
+                prodDict.reserveCapacity(savedProducts.count)
+                var savedDict = [String:Product]()
+                savedDict.reserveCapacity(savedProducts.count)
+                for product in savedProducts {
                     prodDict[product.name] = product.quantity
+                    savedDict[product.name] = product
                 }
-               /* for product in savedProducts {
-                    if {
-                        
-                    } else {
-                        
+                for product in products {
+                    if prodDict[product.name] != nil {
+                        savedDict[product.name]?.price = product.price
+                        self.manager.delete(product)
                     }
-                }*/
-              //  for prod
-              //  product.quantity = savedProducts[1].quantity
+                    else {
+                        savedProducts.append(product)
+                    }
+                }
+                success(savedProducts)
             }
             else {
                 // return only the new products

@@ -19,6 +19,7 @@ class ProductServiceFactory {
             let decoder = JSONDecoder()
             decoder.userInfo[CodingUserInfoKey.managedObjectContext!] = manager.backgroundContext
             let json = try decoder.decode([Product].self, from: jsonData)
+            print(json.count)
             return json
         }
         catch {

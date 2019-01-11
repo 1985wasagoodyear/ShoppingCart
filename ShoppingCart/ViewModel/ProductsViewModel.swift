@@ -55,7 +55,7 @@ final class ProductsViewModel {
 
 extension ProductsViewModel {
     
-    func loadCart() {
+    func loadFromCart() {
         self.products = self.service.fetchProductsFromCart()
     }
     

@@ -23,6 +23,9 @@ final class ShoppingListViewController: UIViewController {
         self.setupViewModel()
         self.loadProducts()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+    }
 
     // MARK: - Setup
     

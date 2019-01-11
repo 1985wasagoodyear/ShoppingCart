@@ -18,27 +18,33 @@ class CoreDataManager {
         self.setupContexts()
     }
     
+    func delete(_ item: NSManagedObject) {
+        let context = self.backgroundContext
+        context.delete(item)
+        self.save()
+    }
     
     static func deleteAll() {
         let manager = CoreDataManager()
-        let context = manager.mainContext
-        
-        let fetch1 = NSFetchRequest<Cart>(entityName: "Cart")
-        do {
-            let carts = try context.fetch(fetch1)
-            carts.forEach { context.delete($0) }
-        } catch {
-            print("Error fetching Cart from Persistent Store")
+        let context = manager.backgroundContext
+        context.performAndWait {
+            let fetch1 = NSFetchRequest<Cart>(entityName: "Cart")
+            do {
+                let carts = try context.fetch(fetch1)
+                carts.forEach { context.delete($0) }
+            } catch {
+                print("Error fetching Cart from Persistent Store")
+            }
+            let fetch2 = NSFetchRequest<Product>(entityName: "Product")
+            do {
+                let products = try context.fetch(fetch2)
+                products.forEach { context.delete($0) }
+            } catch {
+                print("Error fetching Product from Persistent Store")
+            }
+            
+            manager.save()
         }
-        let fetch2 = NSFetchRequest<Product>(entityName: "Product")
-        do {
-            let products = try context.fetch(fetch2)
-            products.forEach { context.delete($0) }
-        } catch {
-            print("Error fetching Product from Persistent Store")
-        }
-        
-        manager.save()
     }
     
     // MARK: - Core Data stack
