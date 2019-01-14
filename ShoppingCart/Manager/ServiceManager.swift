@@ -19,12 +19,15 @@ class ServiceManager {
     
     private var manager: CoreDataManager!
     
+    // small Cache-like to keep track of what objects are currently being fetched
+    // avoid redundant fetching of images
     private var currentlyFetching = Set<String>()
     
     init(manager: CoreDataManager) {
         self.manager = manager
     }
     
+    // for showing only items in the cart
     func fetchProductsFromCart() -> [Product] {
         if let products = self.manager.getShoppingCart().products {
             return products.allObjects as! [Product]
@@ -36,48 +39,26 @@ class ServiceManager {
     func fetchProducts(_ success: @escaping ([Product])->(),
                        _ failure: @escaping ()->()) {
         let downloadTask = { [unowned self] in
-            guard let products = ProductServiceFactory.defaultProducts(self.manager) else {
+            // arbitrarily download data from some service
+            guard let data = ProductServiceFactory.defaultProductData() else {
                 failure()
                 return
             }
-            success(products)
-            return
             
-            // upon completion of downloading:
+            // transform json response into products in background context
+            self.manager.saveProducts(data)
             
-            // if there are existing products
-            // bind products with existing products
-            // and return the union
-            if var savedProducts = self.manager.getProducts() {
-                var prodDict = [String:Int16]()
-                prodDict.reserveCapacity(savedProducts.count)
-                var savedDict = [String:Product]()
-                savedDict.reserveCapacity(savedProducts.count)
-                for product in savedProducts {
-                    prodDict[product.name] = product.quantity
-                    savedDict[product.name] = product
-                }
-                for product in products {
-                    if prodDict[product.name] != nil {
-                        savedDict[product.name]?.price = product.price
-                        self.manager.delete(product)
-                    }
-                    else {
-                        savedProducts.append(product)
-                    }
-                }
-                success(savedProducts)
-            }
-            else {
-                // return only the new products
-                success(products)
-            }
-            
+            // get products on main context and return
+            success(self.manager.getProducts() ?? [])
         }
+        
         DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 1.5,
                                                           execute: downloadTask)
     }
     
+    /// request to fetch an arbitrary image
+    /// utilizes cache-like set to avoid making redundant calls
+    /// retry logic would be nice to have, if the call fails?
     func fetchImage(_ product: Product, _ completion: @escaping ()->()) {
         let name = product.name
         if (self.currentlyFetching.contains(name)) {

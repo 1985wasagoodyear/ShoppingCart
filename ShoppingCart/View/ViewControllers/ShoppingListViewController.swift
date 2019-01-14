@@ -10,6 +10,8 @@ import UIKit
 
 final class ShoppingListViewController: UIViewController {
 
+    // MARK: - IBOutlets
+    
     @IBOutlet private var collectionView: UICollectionView!
     private var loadingIndicator: UIActivityIndicatorView!
     

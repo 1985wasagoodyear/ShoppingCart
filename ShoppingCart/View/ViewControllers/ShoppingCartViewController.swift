@@ -10,6 +10,8 @@ import UIKit
 
 final class ShoppingCartViewController: UIViewController {
 
+    // MARK: - IBOutlets
+    
     @IBOutlet var tableView: UITableView!
     
     private var viewModel: ProductsViewModel! 
@@ -42,6 +44,7 @@ final class ShoppingCartViewController: UIViewController {
     func setupTableView() {
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        self.tableView.rowHeight = ProductTableViewCell.recommendedCellHeight
         let nib = UINib(nibName: ProductTableViewCell.name,
                         bundle: nil)
         self.tableView.register(nib,
@@ -75,9 +78,6 @@ extension ShoppingCartViewController: UITableViewDataSource, UITableViewDelegate
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100.0
-    }
 }
 
 extension ShoppingCartViewController: ChangeCountProtocol {
@@ -89,6 +89,9 @@ extension ShoppingCartViewController: ChangeCountProtocol {
     
     func decrementCount(_ index: Int) {
         self.viewModel.decrementCount(index)
+        if self.viewModel.productCount(at: index) == 0 {
+            self.viewModel.loadFromCart()
+        }
         self.reloadCell(at: index)
     }
     

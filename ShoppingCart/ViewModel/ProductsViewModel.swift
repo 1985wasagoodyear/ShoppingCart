@@ -10,6 +10,9 @@ import Foundation
 
 typealias ViewModelCallback = ()->()
 
+private let MAXIMUM_ALLOWED_COUNT = 99
+private let MINIMUM_ALLOWED_COUNT = 0
+
 final class ProductsViewModel {
     
     fileprivate var products = [Product]() {
@@ -51,7 +54,7 @@ final class ProductsViewModel {
     }
 }
 
-// MARK: - Accessors and the like
+// MARK: - Load/Refresh Data
 
 extension ProductsViewModel {
     
@@ -60,8 +63,11 @@ extension ProductsViewModel {
         self.updateUI()
     }
     
+    /// Get images from Cart
+    /// Only show items in ShoppingCart screen, with counts > 0
+    /// Does not perform callback for UI
     func loadFromCart() {
-        self.products = self.service.fetchProductsFromCart()
+        self.products = self.service.fetchProductsFromCart().filter { $0.quantity > 0 }
     }
     
     func loadProducts(_ success: @escaping ()->(),
@@ -71,6 +77,15 @@ extension ProductsViewModel {
             self?.products = products
         }
         self.service.fetchProducts(productSuccess, failure)
+    }
+}
+
+// MARK: - Individual Product Info/Image Accessors
+
+extension ProductsViewModel {
+    
+    func productCount(at index: Int) -> Int {
+        return Int(self.products[index].quantity)
     }
     
     func productInfo(at index: Int) -> ProductInfo {
@@ -106,32 +121,39 @@ extension ProductsViewModel {
     }
 }
 
+// MARK: - ChangeCountProtocol Delegate Methods
+
+// should actually return some discardableResult BOOL to indicate failed change attempt
+// for UI callbacks?
+
 extension ProductsViewModel: ChangeCountProtocol {
     
-    // need a way to avoid multiple fishes....
-    
+    /// Increment the quantity, but do nothing if count would exceed MAXIMUM_ALLOWED_COUNT
     func incrementCount(_ index: Int) {
         let product = self.products[index]
-        if product.quantity < 99 {
+        if product.quantity < MAXIMUM_ALLOWED_COUNT {
             product.quantity += 1
         }
         
         // create cart if necessary, add item to cart
-        if (self.products[index].cart == nil) {
-            self.products[index].cart = self.coreData.getShoppingCart()
+        if (product.cart == nil) {
+            product.cart = self.coreData.getShoppingCart()
         }
         self.coreData.save()
     }
+    
+    /// Decrement the quantity, but do nothing if count would be below MINIMUM_ALLOWED_COUNT
     func decrementCount(_ index: Int) {
         let product = self.products[index]
-        if product.quantity > 0 {
+        if product.quantity > MINIMUM_ALLOWED_COUNT {
             product.quantity -= 1
         }
         
         // create cart if necessary, add item to cart
-        if (self.products[index].cart == nil) {
-            self.products[index].cart = self.coreData.getShoppingCart()
+        if (product.cart == nil) {
+            product.cart = self.coreData.getShoppingCart()
         }
+        
         self.coreData.save()
     }
     

@@ -8,6 +8,12 @@
 
 import UIKit
 
+/* debug flags */
+
+/// if true, delete all items on startup
+fileprivate let DELETE_ON_START = false
+
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -15,7 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        CoreDataManager.deleteAll()
+        if DELETE_ON_START == true {
+            CoreDataManager.deleteAll()
+        }
         return true
     }
 

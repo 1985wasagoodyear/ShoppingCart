@@ -7,6 +7,9 @@
 //
 //
 
+// Added additional work to conform for Decodable Core Data
+// (unused)
+
 import Foundation
 import CoreData
 

@@ -11,15 +11,19 @@ import UIKit
 class ProductTableViewCell: UITableViewCell {
     
     static let name = "ProductTableViewCell"
+    static let recommendedCellHeight: CGFloat = 100.0
+    
+    // MARK: - IBOutlets
     
     @IBOutlet var productImageView: UIImageView!
-    
     @IBOutlet var counterLabel: UILabel!
     @IBOutlet var priceLabel: UILabel!
     @IBOutlet var addButton: UIButton!
     @IBOutlet var removeButton: UIButton!
     
     weak var delegate: ChangeCountProtocol!
+    
+    // MARK: - Lifecycle Methods
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -28,6 +32,8 @@ class ProductTableViewCell: UITableViewCell {
         self.removeButton.setImageContentMode()
     }
     
+    // MARK: - Custom Action Methods
+    
     @IBAction func addAction(_ sender: Any) {
         self.delegate?.incrementCount(self.tag)
     }
@@ -35,6 +41,8 @@ class ProductTableViewCell: UITableViewCell {
     @IBAction func removeAction(_ sender: Any) {
         self.delegate?.decrementCount(self.tag)
     }
+    
+    // MARK: - Setup Helper
     
     func setup(info: ProductInfo, delegate: ChangeCountProtocol?, index: Int) {
         if let imageData = info.image {
@@ -49,3 +57,5 @@ class ProductTableViewCell: UITableViewCell {
         self.tag = index
     }
 }
+
+
