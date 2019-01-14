@@ -12,14 +12,13 @@ final class ShoppingCartViewController: UIViewController {
 
     @IBOutlet var tableView: UITableView!
     
-    private var viewModel: ProductsViewModel!
+    private var viewModel: ProductsViewModel! 
     
     // MARK: - Lifecycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupTableView()
-        self.setupViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -29,13 +28,15 @@ final class ShoppingCartViewController: UIViewController {
     
     // MARK: - Setup Methods
     
-    func setupViewModel() {
+    func setupViewModel(_ coreData: CoreDataManager, _ service: ServiceManager) {
         let callback: ViewModelCallback = { [weak self] in
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
             }
         }
-        self.viewModel = ProductsViewModel(callback: callback)
+        self.viewModel = ProductsViewModel(manager: coreData,
+                                           service: service,
+                                           callback: callback)
     }
     
     func setupTableView() {

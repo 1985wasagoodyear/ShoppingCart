@@ -8,6 +8,13 @@
 
 import Foundation
 
+enum Result<T> {
+    case success(T)
+    case error(Error)
+}
+
+typealias ResultCompletion = (Result<[Product]>)->()
+
 class ServiceManager {
     
     private var manager: CoreDataManager!
@@ -33,8 +40,8 @@ class ServiceManager {
                 failure()
                 return
             }
-           // success(products)
-            //return
+            success(products)
+            return
             
             // upon completion of downloading:
             

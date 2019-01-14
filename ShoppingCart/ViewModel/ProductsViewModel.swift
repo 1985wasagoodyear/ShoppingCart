@@ -55,6 +55,11 @@ final class ProductsViewModel {
 
 extension ProductsViewModel {
     
+    func reload() {
+        self.coreData.reload()
+        self.updateUI()
+    }
+    
     func loadFromCart() {
         self.products = self.service.fetchProductsFromCart()
     }
@@ -89,7 +94,8 @@ extension ProductsViewModel {
         if product.image == nil {
             self.service.fetchImage(product) {
                 DispatchQueue.main.async {
-                    completion(Data(referencing: product.image!))
+                    guard let data = product.image else { return }
+                    completion(Data(referencing: data))
                 }
                 self.coreData.save()
             }

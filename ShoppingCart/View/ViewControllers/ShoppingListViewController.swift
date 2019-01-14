@@ -13,18 +13,22 @@ final class ShoppingListViewController: UIViewController {
     @IBOutlet private var collectionView: UICollectionView!
     private var loadingIndicator: UIActivityIndicatorView!
     
-    private var viewModel: ProductsViewModel!
+    private var viewModel: ProductsViewModel! {
+        didSet {
+            self.loadProducts()
+        }
+    }
     
     // MARK: - Lifecycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupCollectionView()
-        self.setupViewModel()
-        self.loadProducts()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.viewModel.reload()
     }
 
     // MARK: - Setup
@@ -38,13 +42,15 @@ final class ShoppingListViewController: UIViewController {
                                      forCellWithReuseIdentifier: ProductCollectionViewCell.name)
     }
     
-    func setupViewModel() {
+    func setupViewModel(_ coreData: CoreDataManager, _ service: ServiceManager) {
         let callback: ViewModelCallback = { [weak self] in
             DispatchQueue.main.async {
                 self?.collectionView.reloadData()
             }
         }
-        self.viewModel = ProductsViewModel(callback: callback)
+        self.viewModel = ProductsViewModel(manager: coreData,
+                                           service: service,
+                                           callback: callback)
     }
 
     func loadProducts() {

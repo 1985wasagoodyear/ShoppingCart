@@ -9,6 +9,10 @@
 // this class handles all Core Data interactions
 // remark that this is the only class that imports CoreData
 
+// there exists a private MOC to create data and save it
+// and we will have a main MOC to show data
+// so main MOC is child of private MOC
+
 import Foundation
 import CoreData
 
@@ -69,22 +73,31 @@ class CoreDataManager {
         return container
     }()
     
+    func reload() {
+        self.mainContext.refreshAllObjects()
+        self.backgroundContext.refreshAllObjects()
+    }
+    
     // MARK: - Core Data Saving support
     
     func save() {
-        self.saveBackgroundContext()
+        self.saveMainContext()
     }
     
     private func saveMainContext() {
         let context = self.mainContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        context.perform {
+            if context.hasChanges {
+                do {
+                    try context.save()
+                    self.saveBackgroundContext()
+                } catch {
+                    let nserror = error as NSError
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                }
             }
         }
+        
     }
     
     private func saveBackgroundContext() {
@@ -93,7 +106,6 @@ class CoreDataManager {
             context.performAndWait {
                 do {
                     try context.save()
-                    self.saveMainContext()
                 } catch {
                     let nserror = error as NSError
                     fatalError("Unresolved error \(nserror), \(nserror.userInfo)")

@@ -19,7 +19,6 @@ class ProductServiceFactory {
             let decoder = JSONDecoder()
             decoder.userInfo[CodingUserInfoKey.managedObjectContext!] = manager.backgroundContext
             let json = try decoder.decode([Product].self, from: jsonData)
-            print(json.count)
             return json
         }
         catch {
@@ -28,7 +27,10 @@ class ProductServiceFactory {
         }
     }
     
-    static func getImageData(name: String) -> NSData {
-        return NSData(data: UIImage(named: name)!.pngData()!)
+    static func getImageData(name: String) -> NSData? {
+        guard let image = UIImage(named: name) else {
+            return nil
+        }
+        return NSData(data: image.pngData()!)
     }
 }

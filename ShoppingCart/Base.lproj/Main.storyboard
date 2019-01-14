@@ -48,10 +48,10 @@
             </objects>
             <point key="canvasLocation" x="1071.2" y="133.5832083958021"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Product Tab Bar Controller-->
         <scene sceneID="N66-eY-Bau">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="8AA-as-wJO" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="ProductTabBarController" automaticallyAdjustsScrollViewInsets="NO" id="8AA-as-wJO" customClass="ProductTabBarController" customModule="ShoppingCart" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="nOa-LA-FSK">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
