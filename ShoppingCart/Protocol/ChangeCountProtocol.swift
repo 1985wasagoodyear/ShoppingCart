@@ -12,3 +12,5 @@ protocol ChangeCountProtocol: class {
     func incrementCount(_ index: Int)
     func decrementCount(_ index: Int)
 }
+
+

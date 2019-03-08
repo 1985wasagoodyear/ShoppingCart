@@ -16,7 +16,7 @@
 import Foundation
 import CoreData
 
-class CoreDataManager {
+final class CoreDataManager {
     
     // MARK: - Initialization
     
@@ -26,11 +26,11 @@ class CoreDataManager {
     
     // MARK: - Core Data stack
     
-    var backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+    fileprivate var backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
     
-    var mainContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+    fileprivate var mainContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
     
-    func setupContexts() {
+    private func setupContexts() {
         backgroundContext.persistentStoreCoordinator = self.persistentContainer.persistentStoreCoordinator
         
         mainContext.parent = backgroundContext

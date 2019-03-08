@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rgN-Rt-TTC">
-                                <rect key="frame" x="0.0" y="20" width="375" height="598"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="45W-SU-GTA">
                                     <size key="itemSize" width="50" height="50"/>
@@ -60,10 +60,6 @@
                         <color key="barTintColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="selectedImageTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
-                    <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="8h8-k8-ikG"/>
-                        <segue destination="LSY-uc-bB2" kind="relationship" relationship="viewControllers" id="u1r-kq-iS5"/>
-                    </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hj8-1M-4qu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -78,27 +74,144 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kda-oQ-0QT">
-                                <rect key="frame" x="0.0" y="20" width="375" height="598"/>
+                                <rect key="frame" x="0.0" y="70" width="375" height="597"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aXv-oJ-hey">
+                                <rect key="frame" x="0.0" y="20" width="375" height="50"/>
+                                <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="vc8-ow-j30"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AmericanTypewriter-Semibold" family="American Typewriter" pointSize="20"/>
+                                <state key="normal" title="PAY NOW">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="payNowButtonAction:" destination="LSY-uc-bB2" eventType="touchUpInside" id="uNP-Sx-RLO"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="kda-oQ-0QT" firstAttribute="top" secondItem="aXv-oJ-hey" secondAttribute="bottom" id="0EI-20-sxB"/>
                             <constraint firstItem="X9t-hb-Kgz" firstAttribute="bottom" secondItem="kda-oQ-0QT" secondAttribute="bottom" id="8tQ-6K-58R"/>
-                            <constraint firstItem="kda-oQ-0QT" firstAttribute="top" secondItem="X9t-hb-Kgz" secondAttribute="top" id="FHg-yR-G1W"/>
                             <constraint firstItem="kda-oQ-0QT" firstAttribute="leading" secondItem="X9t-hb-Kgz" secondAttribute="leading" id="dlA-ZJ-Cul"/>
+                            <constraint firstItem="aXv-oJ-hey" firstAttribute="leading" secondItem="X9t-hb-Kgz" secondAttribute="leading" id="gpK-w9-30x"/>
                             <constraint firstItem="X9t-hb-Kgz" firstAttribute="trailing" secondItem="kda-oQ-0QT" secondAttribute="trailing" id="iuA-B6-JSu"/>
+                            <constraint firstItem="X9t-hb-Kgz" firstAttribute="trailing" secondItem="aXv-oJ-hey" secondAttribute="trailing" id="lPe-vo-IaI"/>
+                            <constraint firstItem="aXv-oJ-hey" firstAttribute="top" secondItem="X9t-hb-Kgz" secondAttribute="top" id="zO3-7V-2ul"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="X9t-hb-Kgz"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Checkout" image="cart" id="63k-9r-8zY"/>
                     <connections>
+                        <outlet property="payNowButton" destination="aXv-oJ-hey" id="vJX-a7-EKE"/>
                         <outlet property="tableView" destination="kda-oQ-0QT" id="hWa-eh-HXg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PQ7-gW-XDY" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1071" y="868"/>
+            <point key="canvasLocation" x="1069.5999999999999" y="867.61619190404804"/>
+        </scene>
+        <!--Payment View Controller-->
+        <scene sceneID="5Ho-nd-Em0">
+            <objects>
+                <viewController storyboardIdentifier="PaymentViewController" id="q28-eP-eEq" customClass="PaymentViewController" customModule="ShoppingCart" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="sub-LF-vUm">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your total comes to:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.10000000000000001" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fb0-TE-Ntt">
+                                <rect key="frame" x="20" y="40" width="335" height="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$999.99" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.10000000000000001" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="13q-My-1hm">
+                                <rect key="frame" x="20" y="84" width="335" height="78.5"/>
+                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="72"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pay now?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.10000000000000001" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SXU-Ep-9C2">
+                                <rect key="frame" x="20" y="212.5" width="335" height="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7mE-OP-O7X">
+                                <rect key="frame" x="20" y="597" width="335" height="50"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="t5x-UL-uTY"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AmericanTypewriter-Semibold" family="American Typewriter" pointSize="20"/>
+                                <state key="normal" title="NO"/>
+                                <connections>
+                                    <action selector="noButtonAction:" destination="q28-eP-eEq" eventType="touchUpInside" id="f6G-ik-ZGM"/>
+                                    <action selector="payNowButtonAction:" destination="LSY-uc-bB2" eventType="touchUpInside" id="Yo6-2j-4IE"/>
+                                </connections>
+                            </button>
+                            <view hidden="YES" alpha="0.25" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ihh-L9-Txn">
+                                <rect key="frame" x="0.0" y="-20" width="375" height="727"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="iFj-Pa-wRH">
+                                        <rect key="frame" x="169" y="345" width="37" height="37"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NZg-5m-z8b">
+                                <rect key="frame" x="20" y="527" width="335" height="50"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="8WC-X4-cW2"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AmericanTypewriter-Semibold" family="American Typewriter" pointSize="20"/>
+                                <state key="normal" title="YES"/>
+                                <connections>
+                                    <action selector="payNowButtonAction:" destination="LSY-uc-bB2" eventType="touchUpInside" id="XsB-ta-VWX"/>
+                                    <action selector="yesButtonAction:" destination="q28-eP-eEq" eventType="touchUpInside" id="5rr-3l-XDy"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="NZg-5m-z8b" firstAttribute="leading" secondItem="7mE-OP-O7X" secondAttribute="leading" id="0z7-Td-rPP"/>
+                            <constraint firstItem="ihh-L9-Txn" firstAttribute="top" secondItem="GgE-Ij-Upt" secondAttribute="top" constant="-40" id="19w-Bx-fqa"/>
+                            <constraint firstItem="7mE-OP-O7X" firstAttribute="leading" secondItem="GgE-Ij-Upt" secondAttribute="leading" constant="20" id="6Zr-Yl-CEc"/>
+                            <constraint firstItem="GgE-Ij-Upt" firstAttribute="trailing" secondItem="7mE-OP-O7X" secondAttribute="trailing" constant="20" id="7fT-hX-JVY"/>
+                            <constraint firstItem="Fb0-TE-Ntt" firstAttribute="top" secondItem="GgE-Ij-Upt" secondAttribute="top" constant="20" id="7tJ-c6-I1V"/>
+                            <constraint firstItem="GgE-Ij-Upt" firstAttribute="bottom" secondItem="7mE-OP-O7X" secondAttribute="bottom" constant="20" id="8Fc-ns-hai"/>
+                            <constraint firstItem="13q-My-1hm" firstAttribute="leading" secondItem="Fb0-TE-Ntt" secondAttribute="leading" id="A1X-jZ-59X"/>
+                            <constraint firstItem="SXU-Ep-9C2" firstAttribute="top" secondItem="13q-My-1hm" secondAttribute="bottom" constant="50" id="EvG-7L-tVv"/>
+                            <constraint firstItem="ihh-L9-Txn" firstAttribute="bottom" secondItem="GgE-Ij-Upt" secondAttribute="bottom" constant="40" id="FZ2-FJ-Y18"/>
+                            <constraint firstItem="13q-My-1hm" firstAttribute="top" secondItem="Fb0-TE-Ntt" secondAttribute="bottom" constant="20" id="GQP-JT-chV"/>
+                            <constraint firstItem="iFj-Pa-wRH" firstAttribute="centerX" secondItem="GgE-Ij-Upt" secondAttribute="centerX" id="IzU-gE-lGl"/>
+                            <constraint firstItem="NZg-5m-z8b" firstAttribute="top" relation="greaterThanOrEqual" secondItem="SXU-Ep-9C2" secondAttribute="bottom" constant="20" id="JEe-cX-OPi"/>
+                            <constraint firstItem="SXU-Ep-9C2" firstAttribute="trailing" secondItem="13q-My-1hm" secondAttribute="trailing" id="JaS-OO-QHg"/>
+                            <constraint firstItem="Fb0-TE-Ntt" firstAttribute="leading" secondItem="GgE-Ij-Upt" secondAttribute="leading" constant="20" id="NSe-9P-QM9"/>
+                            <constraint firstItem="iFj-Pa-wRH" firstAttribute="centerY" secondItem="GgE-Ij-Upt" secondAttribute="centerY" id="Pcp-EY-2pB"/>
+                            <constraint firstItem="GgE-Ij-Upt" firstAttribute="trailing" secondItem="Fb0-TE-Ntt" secondAttribute="trailing" constant="20" id="Xdg-Cm-ys9"/>
+                            <constraint firstItem="ihh-L9-Txn" firstAttribute="trailing" secondItem="GgE-Ij-Upt" secondAttribute="trailing" id="eoa-Ie-diD"/>
+                            <constraint firstItem="13q-My-1hm" firstAttribute="trailing" secondItem="Fb0-TE-Ntt" secondAttribute="trailing" id="feh-H9-Joc"/>
+                            <constraint firstItem="7mE-OP-O7X" firstAttribute="top" secondItem="NZg-5m-z8b" secondAttribute="bottom" constant="20" id="oGk-oR-quG"/>
+                            <constraint firstItem="ihh-L9-Txn" firstAttribute="leading" secondItem="GgE-Ij-Upt" secondAttribute="leading" id="q2f-Qn-iD6"/>
+                            <constraint firstItem="SXU-Ep-9C2" firstAttribute="leading" secondItem="13q-My-1hm" secondAttribute="leading" id="uJx-2s-NnO"/>
+                            <constraint firstItem="NZg-5m-z8b" firstAttribute="trailing" secondItem="7mE-OP-O7X" secondAttribute="trailing" id="wHp-7h-AbB"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="GgE-Ij-Upt"/>
+                    </view>
+                    <connections>
+                        <outlet property="loadingSpinner" destination="iFj-Pa-wRH" id="wQ2-PH-HBR"/>
+                        <outlet property="loadingView" destination="ihh-L9-Txn" id="nNs-45-VRN"/>
+                        <outlet property="priceLabel" destination="13q-My-1hm" id="EgQ-Bg-8WJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CUh-fO-3Xm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1806" y="868"/>
         </scene>
     </scenes>
     <resources>

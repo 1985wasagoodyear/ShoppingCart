@@ -10,10 +10,12 @@ import UIKit
 
 final class ShoppingListViewController: UIViewController {
 
-    // MARK: - IBOutlets
+    // MARK: - IBOutlets & UI
     
     @IBOutlet private var collectionView: UICollectionView!
     private var loadingIndicator: UIActivityIndicatorView!
+    
+    // MARK: - Properties
     
     private var viewModel: ProductsViewModel! {
         didSet {
@@ -44,23 +46,23 @@ final class ShoppingListViewController: UIViewController {
                                      forCellWithReuseIdentifier: ProductCollectionViewCell.name)
     }
     
-    func setupViewModel(_ coreData: CoreDataManager, _ service: ServiceManager) {
+    func setViewModel(_ viewModel: ProductsViewModel) {
         let callback: ViewModelCallback = { [weak self] in
             DispatchQueue.main.async {
                 self?.collectionView.reloadData()
             }
         }
-        self.viewModel = ProductsViewModel(manager: coreData,
-                                           service: service,
-                                           callback: callback)
+        self.viewModel = viewModel
+        self.viewModel.setCallback(callback)
     }
 
-    func loadProducts() {
+    private func loadProducts() {
         self.loadingIndicator = UIActivityIndicatorView(style: .whiteLarge)
         self.loadingIndicator.color = .red
         self.view.addSubview(self.loadingIndicator)
         self.loadingIndicator.center = self.view.center
         self.loadingIndicator.hidesWhenStopped = true
+        self.loadingIndicator.startAnimating()
         self.viewModel.loadProducts({
             DispatchQueue.main.async { [weak self] in
                 self?.loadingIndicator.stopAnimating()

@@ -13,8 +13,12 @@ final class ShoppingCartViewController: UIViewController {
     // MARK: - IBOutlets
     
     @IBOutlet var tableView: UITableView!
+    @IBOutlet var payNowButton: UIButton!
     
-    private var viewModel: ProductsViewModel! 
+    // MARK: - Properties
+    
+    private var viewModel: ProductsViewModel!
+    weak var paymentDelegate: PaymentDelegate!
     
     // MARK: - Lifecycle Methods
     
@@ -30,18 +34,18 @@ final class ShoppingCartViewController: UIViewController {
     
     // MARK: - Setup Methods
     
-    func setupViewModel(_ coreData: CoreDataManager, _ service: ServiceManager) {
+    func setViewModel(_ viewModel: ProductsViewModel) {
         let callback: ViewModelCallback = { [weak self] in
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
+                self?.payNowButton.isEnabled = self?.viewModel?.productCount ?? 0 > 0
             }
         }
-        self.viewModel = ProductsViewModel(manager: coreData,
-                                           service: service,
-                                           callback: callback)
+        self.viewModel = viewModel
+        self.viewModel.setCallback(callback)
     }
     
-    func setupTableView() {
+    private func setupTableView() {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.rowHeight = ProductTableViewCell.recommendedCellHeight
@@ -51,7 +55,11 @@ final class ShoppingCartViewController: UIViewController {
                                 forCellReuseIdentifier: ProductTableViewCell.name)
     }
 
+    // MARK: - Custom Action Methods
 
+    @IBAction func payNowButtonAction(_ sender: UIButton) {
+        self.paymentDelegate?.startPaymentFlow()
+    }
 }
 
 extension ShoppingCartViewController: UITableViewDataSource, UITableViewDelegate {
@@ -74,7 +82,6 @@ extension ShoppingCartViewController: UITableViewDataSource, UITableViewDelegate
                 self?.reloadCell(at: row)
             }
         }
-        
         return cell
     }
     

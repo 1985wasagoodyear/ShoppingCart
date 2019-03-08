@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ProductServiceFactory {
+final class ProductServiceFactory {
     
     /// Call to return arbitrary data from some service
     static func defaultProductData() -> [[String:Any]]? {
@@ -32,28 +32,4 @@ class ProductServiceFactory {
         return NSData(data: image.pngData()!)
     }
     
-}
-
-extension ProductServiceFactory {
-    
-    /// this is just fundamentally awkward for this use-case
-    /// there is no good reason to create redundant objects then delete these objects later
-    /// left here to help give example of Decodable Core Data objects
-    static func defaultProducts(_ manager: CoreDataManager) -> [Product]? {
-        guard let jsonPath = Bundle.main.path(forResource: "groceries",
-                                              ofType: "json") else {
-            return nil
-        }
-        do {
-            let jsonData = try Data(contentsOf: URL(fileURLWithPath: jsonPath))
-            let decoder = JSONDecoder()
-            decoder.userInfo[CodingUserInfoKey.managedObjectContext!] = manager.backgroundContext
-            let json = try decoder.decode([Product].self, from: jsonData)
-            return json
-        }
-        catch {
-            print(error)
-            return nil
-        }
-    }
 }

@@ -8,12 +8,10 @@
 
 import Foundation
 
-typealias ViewModelCallback = ()->()
-
 private let MAXIMUM_ALLOWED_COUNT = 99
 private let MINIMUM_ALLOWED_COUNT = 0
 
-final class ProductsViewModel {
+final class ProductsViewModel: ViewModel {
     
     fileprivate var products = [Product]() {
         didSet {
@@ -21,10 +19,16 @@ final class ProductsViewModel {
         }
     }
     
-    private var updateUI: ViewModelCallback
+    private var updateUI: ViewModelCallback!
     
     var productCount: Int {
         return products.count
+    }
+    var totalPrice: Double {
+        return products.reduce(0.0) {$0 + (($1.quantity > 0) ? Double($1.price) * Double($1.quantity) : 0.0) }
+    }
+    var totalPriceString: String {
+        return String.init(format: "$%.2f", totalPrice)
     }
     
     fileprivate var service: ServiceManager!
@@ -32,24 +36,13 @@ final class ProductsViewModel {
     
     // MARK: - Initialization
     
-    init(callback: @escaping ViewModelCallback) {
-        self.coreData = CoreDataManager()
-        self.service = ServiceManager(manager: coreData)
-        self.updateUI = callback
-    }
-    
     init(manager: CoreDataManager,
-         callback: @escaping ViewModelCallback) {
-        self.coreData = manager
-        self.service = ServiceManager(manager: manager)
-        self.updateUI = callback
-    }
-    
-    init(manager: CoreDataManager,
-         service: ServiceManager,
-         callback: @escaping ViewModelCallback) {
+         service: ServiceManager) {
         self.coreData = manager
         self.service = service
+    }
+    
+    func setCallback(_ callback: @escaping ViewModelCallback) {
         self.updateUI = callback
     }
 }
@@ -77,6 +70,23 @@ extension ProductsViewModel {
             self?.products = products
         }
         self.service.fetchProducts(productSuccess, failure)
+    }
+    
+    /// simulates a long-running API call to perform payment operation
+    func performPayment(_ completion: @escaping ()->()) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            guard let products = self?.products else {
+                completion()
+                return
+            }
+            
+            for product in products {
+                product.quantity = 0
+            }
+            
+            self?.coreData.save()
+            completion()
+        }
     }
 }
 

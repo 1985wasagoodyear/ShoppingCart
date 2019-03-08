@@ -8,20 +8,58 @@
 
 import UIKit
 
-class ProductTabBarController: UITabBarController {
+private enum ProductPaidState {
+    case paid
+    case cancelled
+    case unknown
+}
+
+final class ProductTabBarController: UITabBarController {
     
-    private var coreData: CoreDataManager!
-    private var service: ServiceManager!
+    // MARK: - Properties
+    
+    private var paidState: ProductPaidState = .unknown
+    
+    // MARK: - Lifecycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.coreData = CoreDataManager()
-        self.service = ServiceManager(manager: coreData)
-        
-        let listVC = self.viewControllers?.first as! ShoppingListViewController
-        listVC.setupViewModel(self.coreData, self.service)
-        let tableVC = self.viewControllers?.last as! ShoppingCartViewController
-        tableVC.setupViewModel(self.coreData, self.service)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        determineIfShowMessage()
+    }
+    
+    // MARK: - UI for Payment Confirmation
+    
+    private func determineIfShowMessage() {
+        if paidState == .paid {
+            showToast("Thank you for your purchase!")
+        }
+        else if paidState == .cancelled {
+            showToast("Payment cancelled")
+        }
+        paidState = .unknown
+    }
+    
+    private func showToast(_ message: String) {
+        guard let vcs = viewControllers, vcs.count > selectedIndex else {
+            return
+            
+        }
+        let currentVC = vcs[selectedIndex]
+        currentVC.showAlert(text: message)
+    }
+}
+
+extension ProductTabBarController: PaymentDelegate {
+
+    func finishPaymentFlow(sender: Any? = nil) {
+        paidState = .paid
+    }
+    
+    func cancelPaymentFlow(sender: Any? = nil) {
+        paidState = .cancelled
     }
 }

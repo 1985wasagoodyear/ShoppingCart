@@ -18,12 +18,19 @@ fileprivate let DELETE_ON_START = false
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var coordinator: ProductTabBarCoordinator!
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         if DELETE_ON_START == true {
             CoreDataManager.deleteAll()
         }
+        
+        coordinator = ProductTabBarCoordinator()
+        coordinator.start()
+        window?.rootViewController = coordinator.rootVC
+        window?.makeKeyAndVisible()
+        
         return true
     }
 
