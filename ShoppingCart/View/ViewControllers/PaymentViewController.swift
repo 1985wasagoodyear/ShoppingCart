@@ -19,7 +19,7 @@ final class PaymentViewController: UIViewController {
     // MARK: - Properties
     
     private var viewModel: ProductsViewModel!
-    weak var paymentDelegate: PaymentDelegate!
+    weak var paymentNavDelegate: PaymentNavigationDelegate!
     
     // MARK: - Lifecycle Methods
     
@@ -47,13 +47,15 @@ final class PaymentViewController: UIViewController {
         viewModel.performPayment { [weak self] in
             DispatchQueue.main.async {
                 self?.hideLoading()
-                self?.paymentDelegate?.finishPaymentFlow(sender: self)
+                if let strongSelf = self {
+                    strongSelf.paymentNavDelegate?.finishPaymentFlow(sender: strongSelf)
+                }
             }
         }
     }
     
     @IBAction private func noButtonAction(_ sender: Any) {
-        paymentDelegate?.cancelPaymentFlow(sender: self)
+        paymentNavDelegate?.cancelPaymentFlow(sender: self)
     }
     
     // MARK: - Loading UI Helpers

@@ -53,13 +53,13 @@ final class ProductTabBarController: UITabBarController {
     }
 }
 
-extension ProductTabBarController: PaymentDelegate {
+extension ProductTabBarController: PaymentHandler {
 
-    func finishPaymentFlow(sender: Any? = nil) {
+    func finishPaymentFlow() {
         paidState = .paid
     }
     
-    func cancelPaymentFlow(sender: Any? = nil) {
+    func cancelPaymentFlow() {
         paidState = .cancelled
     }
 }

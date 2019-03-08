@@ -29,7 +29,7 @@ final class ProductTabBarCoordinator: Coordinator {
         // create my VCs for my tabbar
         let first = UIStoryboard.getFromMain("ShoppingListViewController") as! ShoppingListViewController
         let second = UIStoryboard.getFromMain("ShoppingCartViewController") as! ShoppingCartViewController
-        second.paymentDelegate = self
+        second.paymentNavDelegate = self
         
         // create my VMs
         let firstVM = ProductsViewModel.init(manager: coreData, service: service)
@@ -53,24 +53,20 @@ final class ProductTabBarCoordinator: Coordinator {
 }
 
 
-extension ProductTabBarCoordinator: PaymentDelegate {
+extension ProductTabBarCoordinator: PaymentNavigationDelegate {
     func startPaymentFlow() {
         let newCoordinator = ProductPaymentCoordinator(rootVC: rootVC, parent: self,
                                                        coreData: coreData, service: service)
-        newCoordinator.paymentDelegate = self
+        newCoordinator.paymentNavDelegate = self
         newCoordinator.start()
         addChildCoordinator(newCoordinator)
     }
-    func finishPaymentFlow(sender: Any?) {
+    func finishPaymentFlow(sender: UIViewController) {
         rootVC.finishPaymentFlow()
-        if let vc = sender as? UIViewController {
-            vc.dismiss(animated: true, completion: nil)
-        }
+        sender.dismiss(animated: true, completion: nil)
     }
-    func cancelPaymentFlow(sender: Any?) {
+    func cancelPaymentFlow(sender: UIViewController) {
         rootVC.cancelPaymentFlow()
-        if let vc = sender as? UIViewController {
-            vc.dismiss(animated: true, completion: nil)
-        }
+        sender.dismiss(animated: true, completion: nil)
     }
 }

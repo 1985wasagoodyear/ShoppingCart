@@ -1,5 +1,5 @@
 //
-//  PaymentDelegate.swift
+//  PaymentHandler.swift
 //  ShoppingCart
 //
 //  Created by Kevin Yu on 3/7/19.
@@ -8,13 +8,13 @@
 
 import Foundation
 
-protocol PaymentDelegate: class {
+protocol PaymentHandler: class {
     func startPaymentFlow()
-    func finishPaymentFlow(sender: Any?)
-    func cancelPaymentFlow(sender: Any?)
+    func finishPaymentFlow()
+    func cancelPaymentFlow()
 }
 
-extension PaymentDelegate {
+extension PaymentHandler {
     func startPaymentFlow() {
         print("Unimplemented")
     }

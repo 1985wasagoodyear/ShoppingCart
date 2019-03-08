@@ -12,7 +12,7 @@ final class ProductPaymentCoordinator: Coordinator {
     
     private var rootVC: UIViewController
     private var parentCoordinator: Coordinator
-    weak var paymentDelegate: PaymentDelegate!
+    weak var paymentNavDelegate: PaymentNavigationDelegate!
     
     private var coreData: CoreDataManager
     private var service: ServiceManager
@@ -29,7 +29,7 @@ final class ProductPaymentCoordinator: Coordinator {
         let vc = UIStoryboard.getFromMain("PaymentViewController") as! PaymentViewController
         let vm = ProductsViewModel(manager: coreData, service: service)
         vc.setViewModel(vm)
-        vc.paymentDelegate = self
+        vc.paymentNavDelegate = self
         rootVC.present(vc, animated: true, completion: nil)
     }
     
@@ -39,15 +39,15 @@ final class ProductPaymentCoordinator: Coordinator {
     
 }
 
-extension ProductPaymentCoordinator: PaymentDelegate {
+extension ProductPaymentCoordinator: PaymentNavigationDelegate {
     
-    func finishPaymentFlow(sender: Any? = nil) {
-        self.paymentDelegate.finishPaymentFlow(sender: sender)
+    func finishPaymentFlow(sender: UIViewController) {
+        self.paymentNavDelegate.finishPaymentFlow(sender: sender)
         finish()
     }
     
-    func cancelPaymentFlow(sender: Any? = nil) {
-        self.paymentDelegate.cancelPaymentFlow(sender: sender)
+    func cancelPaymentFlow(sender: UIViewController) {
+        self.paymentNavDelegate.cancelPaymentFlow(sender: sender)
         finish()
     }
 }

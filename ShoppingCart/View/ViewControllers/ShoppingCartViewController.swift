@@ -18,7 +18,7 @@ final class ShoppingCartViewController: UIViewController {
     // MARK: - Properties
     
     private var viewModel: ProductsViewModel!
-    weak var paymentDelegate: PaymentDelegate!
+    weak var paymentNavDelegate: PaymentNavigationDelegate!
     
     // MARK: - Lifecycle Methods
     
@@ -58,7 +58,7 @@ final class ShoppingCartViewController: UIViewController {
     // MARK: - Custom Action Methods
 
     @IBAction func payNowButtonAction(_ sender: UIButton) {
-        self.paymentDelegate?.startPaymentFlow()
+        self.paymentNavDelegate?.startPaymentFlow()
     }
 }
 
