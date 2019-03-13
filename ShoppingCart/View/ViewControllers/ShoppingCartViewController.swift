@@ -17,7 +17,7 @@ final class ShoppingCartViewController: UIViewController {
     
     // MARK: - Properties
     
-    private var viewModel: ProductsViewModel!
+    private var viewModel: (ListViewModel & ChangeCountProtocol)!
     weak var paymentNavDelegate: PaymentNavigationDelegate!
     
     // MARK: - Lifecycle Methods
@@ -34,7 +34,7 @@ final class ShoppingCartViewController: UIViewController {
     
     // MARK: - Setup Methods
     
-    func setViewModel(_ viewModel: ProductsViewModel) {
+    func setViewModel(_ viewModel: (ChangeCountProtocol & ListViewModel)) {
         let callback: ViewModelCallback = { [weak self] in
             DispatchQueue.main.async {
                 self?.tableView.reloadData()

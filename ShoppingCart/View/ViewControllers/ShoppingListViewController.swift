@@ -17,7 +17,7 @@ final class ShoppingListViewController: UIViewController {
     
     // MARK: - Properties
     
-    private var viewModel: ProductsViewModel! {
+    private var viewModel: (ListViewModel & ChangeCountProtocol)! {
         didSet {
             self.loadProducts()
         }
@@ -46,7 +46,7 @@ final class ShoppingListViewController: UIViewController {
                                      forCellWithReuseIdentifier: ProductCollectionViewCell.name)
     }
     
-    func setViewModel(_ viewModel: ProductsViewModel) {
+    func setViewModel(_ viewModel: (ChangeCountProtocol & ListViewModel)) {
         let callback: ViewModelCallback = { [weak self] in
             DispatchQueue.main.async {
                 self?.collectionView.reloadData()

@@ -11,7 +11,7 @@ import Foundation
 private let MAXIMUM_ALLOWED_COUNT = 99
 private let MINIMUM_ALLOWED_COUNT = 0
 
-final class ProductsViewModel: ViewModel {
+final class ProductsViewModel: ListViewModel {
     
     fileprivate var products = [Product]() {
         didSet {

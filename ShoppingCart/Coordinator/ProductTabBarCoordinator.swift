@@ -32,8 +32,8 @@ final class ProductTabBarCoordinator: Coordinator {
         second.paymentNavDelegate = self
         
         // create my VMs
-        let firstVM = ProductsViewModel.init(manager: coreData, service: service)
-        let secondVM = ProductsViewModel.init(manager: coreData, service: service)
+        let firstVM = ProductsViewModel(manager: coreData, service: service)
+        let secondVM = ProductsViewModel(manager: coreData, service: service)
         first.setViewModel(firstVM)
         second.setViewModel(secondVM)
         

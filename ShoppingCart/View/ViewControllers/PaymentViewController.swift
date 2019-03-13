@@ -18,7 +18,7 @@ final class PaymentViewController: UIViewController {
     
     // MARK: - Properties
     
-    private var viewModel: ProductsViewModel!
+    private var viewModel: ListViewModel!
     weak var paymentNavDelegate: PaymentNavigationDelegate!
     
     // MARK: - Lifecycle Methods
@@ -30,7 +30,7 @@ final class PaymentViewController: UIViewController {
     
     // MARK: - Setup Methods
     
-    func setViewModel(_ viewModel: ProductsViewModel) {
+    func setViewModel(_ viewModel: ListViewModel) {
         let callback: ViewModelCallback = { [weak self] in
             DispatchQueue.main.async {
                 self?.priceLabel.text = viewModel.totalPriceString
