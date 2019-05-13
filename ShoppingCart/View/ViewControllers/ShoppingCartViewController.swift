@@ -103,7 +103,7 @@ extension ShoppingCartViewController: ChangeCountProtocol {
     }
     
     private func reloadCell(at index: Int) {
-        if #available(iOS 11.0, *) {
+       /* if #available(iOS 11.0, *) {
             UIView.setAnimationsEnabled(false)
             self.tableView.performBatchUpdates({[unowned self] in
                 self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)],
@@ -113,9 +113,9 @@ extension ShoppingCartViewController: ChangeCountProtocol {
                     UIView.setAnimationsEnabled(true)
                 }
             }
-        } else {
+        } else { */
             self.tableView.reloadData()
-        }
+       // }
     }
     
 }
