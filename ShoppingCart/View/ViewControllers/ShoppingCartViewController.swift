@@ -12,20 +12,20 @@ final class ShoppingCartViewController: UIViewController {
 
     // MARK: - IBOutlets
     
-    @IBOutlet var tableView: UITableView!
-    @IBOutlet var payNowButton: UIButton!
+    @IBOutlet var tableView: UITableView! {
+        didSet { setupTableView() }
+    }
+    @IBOutlet var payNowButton: UIButton! {
+        didSet { setupPayNowButton() }
+    }
     
     // MARK: - Properties
     
     private var viewModel: (ListViewModel & ChangeCountProtocol)!
     weak var paymentNavDelegate: PaymentNavigationDelegate!
+    var blankCell = UITableViewCell()
     
     // MARK: - Lifecycle Methods
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupTableView()
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -47,13 +47,22 @@ final class ShoppingCartViewController: UIViewController {
     }
     
     private func setupTableView() {
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.tableView.rowHeight = ProductTableViewCell.recommendedCellHeight
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.rowHeight = ProductTableViewCell.recommendedCellHeight
         let nib = UINib(nibName: ProductTableViewCell.name,
                         bundle: nil)
         tableView.register(nib,
                            forCellReuseIdentifier: ProductTableViewCell.name)
+    }
+    
+    private func setupPayNowButton() {
+        payNowButton.layer.cornerRadius = 30.0
+        payNowButton.layer.masksToBounds = false
+        payNowButton.titleLabel?.numberOfLines = 0
+        payNowButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        payNowButton.titleLabel?.textAlignment = .center
+        payNowButton.dropShadow()
     }
 
     // MARK: - Custom Action Methods
@@ -66,14 +75,23 @@ final class ShoppingCartViewController: UIViewController {
 extension ShoppingCartViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.productCount
+        return (section == 0) ? viewModel.productCount : 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch indexPath.section {
+        case 0:
+            return productCell(atIndexPath: indexPath)
+        default:
+            return blankCell
+        }
+    }
+    
+    private func productCell(atIndexPath indexPath: IndexPath) -> ProductTableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ProductTableViewCell.name, for: indexPath) as! ProductTableViewCell
         let row = indexPath.row
         let info = viewModel.productInfo(at: row)

@@ -14,6 +14,15 @@ extension UIButton {
     }
 }
 
+extension UIView {
+    func dropShadow() {
+        layer.masksToBounds = false
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOffset = CGSize(width: 0.0, height: 5.0)
+        layer.shadowOpacity = 0.5
+    }
+}
+
 extension UIViewController {
     func showAlert(text: String) {
         let alert = UIAlertController(title: text, message: nil, preferredStyle: .alert)

@@ -12,7 +12,9 @@ final class ShoppingListViewController: UIViewController {
 
     // MARK: - IBOutlets & UI
     
-    @IBOutlet private var collectionView: UICollectionView!
+    @IBOutlet private var collectionView: UICollectionView! {
+        didSet { setupCollectionView() }
+    }
     private var loadingIndicator: UIActivityIndicatorView!
     
     // MARK: - Properties
@@ -23,11 +25,6 @@ final class ShoppingListViewController: UIViewController {
     
     // MARK: - Lifecycle Methods
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupCollectionView()
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.reload()
@@ -35,7 +32,7 @@ final class ShoppingListViewController: UIViewController {
 
     // MARK: - Setup
     
-    func setupCollectionView() {
+    private func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
         let nib = UINib(nibName: ProductCollectionViewCell.name,
