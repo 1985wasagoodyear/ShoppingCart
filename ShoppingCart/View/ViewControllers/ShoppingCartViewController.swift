@@ -98,6 +98,13 @@ extension ShoppingCartViewController: UITableViewDataSource, UITableViewDelegate
         }
     }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            tableView.slideInAnimation(duration: 0.5, delay: 0.05,
+                                       for: cell, at: indexPath)
+        }
+    }
+    
     private func productCell(atIndexPath indexPath: IndexPath) -> ProductTableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ProductTableViewCell.name, for: indexPath) as! ProductTableViewCell
         let row = indexPath.row
