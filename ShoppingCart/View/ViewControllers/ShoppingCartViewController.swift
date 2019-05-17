@@ -19,11 +19,18 @@ final class ShoppingCartViewController: UIViewController {
         didSet { setupPayNowButton() }
     }
     
+    // MARK: - Programmatic UI
+    
+    lazy var blankCell: UITableViewCell = {
+        let cell = UITableViewCell()
+        cell.selectionStyle = .none
+        return cell
+    }()
+    
     // MARK: - Properties
     
     private var viewModel: (ListViewModel & ChangeCountProtocol)!
     weak var paymentNavDelegate: PaymentNavigationDelegate!
-    var blankCell = UITableViewCell()
     
     // MARK: - Lifecycle Methods
     
@@ -39,7 +46,9 @@ final class ShoppingCartViewController: UIViewController {
             DispatchQueue.main.async { [weak self] in
                 guard let strSelf = self else { return }
                 strSelf.tableView.reloadData()
-                strSelf.payNowButton.isEnabled = strSelf.viewModel.productCount > 0
+                let prodsExist = strSelf.viewModel.productCount > 0
+                strSelf.payNowButton.isEnabled = prodsExist
+                strSelf.payNowButton.alpha = prodsExist ? 1.0 : 0.5
             }
         }
         viewModel = newVM
@@ -59,9 +68,7 @@ final class ShoppingCartViewController: UIViewController {
     private func setupPayNowButton() {
         payNowButton.layer.cornerRadius = 30.0
         payNowButton.layer.masksToBounds = false
-        payNowButton.titleLabel?.numberOfLines = 0
-        payNowButton.titleLabel?.adjustsFontSizeToFitWidth = true
-        payNowButton.titleLabel?.textAlignment = .center
+        payNowButton.setupMultiline()
         payNowButton.dropShadow()
     }
 

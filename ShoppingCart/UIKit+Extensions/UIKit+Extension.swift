@@ -12,6 +12,12 @@ extension UIButton {
     func setImageContentMode(_ mode: ContentMode! = .scaleAspectFit) {
         self.imageView?.contentMode = mode
     }
+    func setupMultiline() {
+        guard let label = titleLabel else { return }
+        label.numberOfLines = 0
+        label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
+    }
 }
 
 extension UIView {
