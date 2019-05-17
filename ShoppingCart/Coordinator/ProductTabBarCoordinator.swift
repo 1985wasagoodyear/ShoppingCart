@@ -21,8 +21,8 @@ final class ProductTabBarCoordinator: Coordinator {
         rootVC = UIStoryboard.getFromMain("ProductTabBarController") as! ProductTabBarController
         
         // create services
-        self.coreData = CoreDataManager()
-        self.service = ServiceManager(manager: coreData)
+        coreData = CoreDataManager()
+        service = ServiceManager(manager: coreData)
     }
     
     override func start() {

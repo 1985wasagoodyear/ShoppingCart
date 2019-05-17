@@ -21,7 +21,7 @@ final class CoreDataManager {
     // MARK: - Initialization
     
     init() {
-        self.setupContexts()
+        setupContexts()
     }
     
     // MARK: - Core Data stack
@@ -48,18 +48,18 @@ final class CoreDataManager {
     
     /// Helper method to reload currently-loaded objects
     func reload() {
-        self.mainContext.refreshAllObjects()
-        self.backgroundContext.refreshAllObjects()
+        mainContext.refreshAllObjects()
+        backgroundContext.refreshAllObjects()
     }
     
     // MARK: - Core Data Saving support
     
     func save() {
-        self.saveMainContext()
+        saveMainContext()
     }
     
     private func saveMainContext() {
-        let context = self.mainContext
+        let context = mainContext
         context.perform {
             if context.hasChanges {
                 do {
@@ -74,7 +74,7 @@ final class CoreDataManager {
     }
     
     private func saveBackgroundContext() {
-        let context = self.backgroundContext
+        let context = backgroundContext
         if context.hasChanges {
             context.performAndWait {
                 do {
@@ -90,9 +90,8 @@ final class CoreDataManager {
     // MARK: - Core Data Deletion Support
     
     func delete(_ item: NSManagedObject) {
-        let context = self.backgroundContext
-        context.delete(item)
-        self.save()
+        backgroundContext.delete(item)
+        save()
     }
     
     /// Called to delete all items
@@ -104,20 +103,19 @@ final class CoreDataManager {
             do {
                 let carts = try context.fetch(fetch1)
                 carts.forEach { context.delete($0) }
-            } catch {
-                print("Error fetching Cart from Persistent Store")
             }
+            catch { print("Error fetching Cart from Persistent Store") }
             let fetch2 = NSFetchRequest<Product>(entityName: "Product")
             do {
                 let products = try context.fetch(fetch2)
                 products.forEach { context.delete($0) }
-            } catch {
-                print("Error fetching Product from Persistent Store")
             }
+            catch { print("Error fetching Product from Persistent Store") }
             
             manager.saveBackgroundContext()
         }
     }
+    
 }
 
 // MARK: - Shopping Cart Accessors
@@ -127,22 +125,19 @@ extension CoreDataManager {
     private func newCart(in context: NSManagedObjectContext) -> Cart {
         let cart = Cart(context: context)
         cart.date = NSDate()
-        self.save()
+        save()
         return cart
     }
     
     func getShoppingCart() -> Cart {
-        let context = self.mainContext
+        let context = mainContext
         let fetch = NSFetchRequest<Cart>(entityName: "Cart")
         do {
-            if let cart = try context.fetch(fetch).first {
-                return cart
-            }
-        } catch {
-            print("Error fetching Cart from Persistent Store")
+            if let cart = try context.fetch(fetch).first { return cart }
         }
+        catch { print("Error fetching Cart from Persistent Store") }
         
-        return self.newCart(in: context)
+        return newCart(in: context)
     }
 }
 
@@ -152,7 +147,7 @@ extension CoreDataManager {
     
     /// to be performed on main thread
     func getProducts() -> [Product]? {
-        let context = self.mainContext
+        let context = mainContext
         let fetch = NSFetchRequest<Product>(entityName: "Product")
         do {
             let products = try context.fetch(fetch)
@@ -167,20 +162,17 @@ extension CoreDataManager {
     func saveProducts(_ jsonArray: [[String:Any]]?) {
         guard let json = jsonArray else { return }
         
-        let context = self.backgroundContext
+        let context = backgroundContext
         let fetch = NSFetchRequest<Product>(entityName: "Product")
         var products: [Product]! = nil
         do {
             products = try context.fetch(fetch)
-        } catch {
-            print("Error fetching Product from Persistent Store for update")
         }
+        catch { print("Error fetching Product from Persistent Store for update") }
         
         var allNames = Set<String>()
         allNames.reserveCapacity(products.capacity)
-        for product in products {
-            allNames.insert(product.name)
-        }
+        products.forEach { allNames.insert($0.name) }
         
         for item in json {
             if let name = item["name"] as? String {
@@ -195,7 +187,7 @@ extension CoreDataManager {
                 }
             }
         }
-        self.saveBackgroundContext()
+        saveBackgroundContext()
     }
     
 }

@@ -30,26 +30,26 @@ final class PaymentViewController: UIViewController {
     
     // MARK: - Setup Methods
     
-    func setViewModel(_ viewModel: ListViewModel) {
-        let callback: ViewModelCallback = { [weak self] in
-            DispatchQueue.main.async {
-                self?.priceLabel.text = viewModel.totalPriceString
+    func setViewModel(_ newVM: ListViewModel) {
+        let callback: ViewModelCallback = {
+            DispatchQueue.main.async { [weak self] in
+                guard let strSelf = self else { return }
+                strSelf.priceLabel.text = strSelf.viewModel.totalPriceString
             }
         }
-        self.viewModel = viewModel
-        self.viewModel.setCallback(callback)
+        viewModel = newVM
+        viewModel.setCallback(callback)
     }
 
     // MARK: - Custom Action Methods
     
     @IBAction private func yesButtonAction(_ sender: Any) {
         showLoading()
-        viewModel.performPayment { [weak self] in
-            DispatchQueue.main.async {
-                self?.hideLoading()
-                if let strongSelf = self {
-                    strongSelf.paymentNavDelegate?.finishPaymentFlow(sender: strongSelf)
-                }
+        viewModel.performPayment {
+            DispatchQueue.main.async { [weak self] in
+                guard let strSelf = self else { return }
+                strSelf.hideLoading()
+                strSelf.paymentNavDelegate?.finishPaymentFlow(sender: strSelf)
             }
         }
     }

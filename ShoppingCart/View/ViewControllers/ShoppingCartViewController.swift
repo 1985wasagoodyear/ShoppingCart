@@ -24,25 +24,26 @@ final class ShoppingCartViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupTableView()
+        setupTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.viewModel.loadFromCart()
+        viewModel.loadFromCart()
     }
     
     // MARK: - Setup Methods
     
-    func setViewModel(_ viewModel: (ChangeCountProtocol & ListViewModel)) {
-        let callback: ViewModelCallback = { [weak self] in
-            DispatchQueue.main.async {
-                self?.tableView.reloadData()
-                self?.payNowButton.isEnabled = self?.viewModel?.productCount ?? 0 > 0
+    func setViewModel(_ newVM: (ChangeCountProtocol & ListViewModel)) {
+        let callback: ViewModelCallback = {
+            DispatchQueue.main.async { [weak self] in
+                guard let strSelf = self else { return }
+                strSelf.tableView.reloadData()
+                strSelf.payNowButton.isEnabled = strSelf.viewModel.productCount > 0
             }
         }
-        self.viewModel = viewModel
-        self.viewModel.setCallback(callback)
+        viewModel = newVM
+        viewModel.setCallback(callback)
     }
     
     private func setupTableView() {
@@ -51,14 +52,14 @@ final class ShoppingCartViewController: UIViewController {
         self.tableView.rowHeight = ProductTableViewCell.recommendedCellHeight
         let nib = UINib(nibName: ProductTableViewCell.name,
                         bundle: nil)
-        self.tableView.register(nib,
-                                forCellReuseIdentifier: ProductTableViewCell.name)
+        tableView.register(nib,
+                           forCellReuseIdentifier: ProductTableViewCell.name)
     }
 
     // MARK: - Custom Action Methods
 
     @IBAction func payNowButtonAction(_ sender: UIButton) {
-        self.paymentNavDelegate?.startPaymentFlow()
+        paymentNavDelegate?.startPaymentFlow()
     }
 }
 
@@ -69,16 +70,16 @@ extension ShoppingCartViewController: UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.viewModel.productCount
+        return viewModel.productCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ProductTableViewCell.name, for: indexPath) as! ProductTableViewCell
         let row = indexPath.row
-        let info = self.viewModel.productInfo(at: row)
+        let info = viewModel.productInfo(at: row)
         cell.setup(info: info, delegate: self, index: row)
         if info.image == nil {
-            self.viewModel.getImage(at: row) { [weak self] image in
+            viewModel.getImage(at: row) { [weak self] image in
                 self?.reloadCell(at: row)
             }
         }
@@ -90,32 +91,32 @@ extension ShoppingCartViewController: UITableViewDataSource, UITableViewDelegate
 extension ShoppingCartViewController: ChangeCountProtocol {
     
     func incrementCount(_ index: Int) {
-        self.viewModel.incrementCount(index)
-        self.reloadCell(at: index)
+        viewModel.incrementCount(index)
+        reloadCell(at: index)
     }
     
     func decrementCount(_ index: Int) {
-        self.viewModel.decrementCount(index)
-        if self.viewModel.productCount(at: index) == 0 {
-            self.viewModel.loadFromCart()
+        viewModel.decrementCount(index)
+        if viewModel.productCount(at: index) == 0 {
+            viewModel.loadFromCart()
         }
-        self.reloadCell(at: index)
+        reloadCell(at: index)
     }
     
     private func reloadCell(at index: Int) {
-       /* if #available(iOS 11.0, *) {
-            UIView.setAnimationsEnabled(false)
-            self.tableView.performBatchUpdates({[unowned self] in
-                self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)],
-                                          with: .automatic)
-            }) { (finished) in
-                if (finished == true) {
-                    UIView.setAnimationsEnabled(true)
-                }
+        let basicReload: ()->Void = { self.tableView.reloadData() }
+        if #available(iOS 11.0, *) {
+            let indices = [IndexPath(row: index, section: 0)]
+            if tableView.numberOfRows(inSection: 0) == viewModel.productCount {
+                tableView.reloadRows(at: indices, with: .fade)
             }
-        } else { */
-            self.tableView.reloadData()
-       // }
+            else {
+                tableView.beginUpdates()
+                tableView.deleteRows(at: indices, with: .fade)
+                tableView.endUpdates()
+            }
+        }
+        else { basicReload() }
     }
     
 }

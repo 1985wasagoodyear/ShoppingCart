@@ -32,5 +32,4 @@ protocol ListViewModel: ViewModel {
     func productInfo(at index: Int) -> ProductInfo
     
     func getImage(at index: Int, _ completion: @escaping (Data)->())
-    
 }

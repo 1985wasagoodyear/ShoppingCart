@@ -27,35 +27,36 @@ class ProductTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.selectionStyle = .none
-        self.addButton.setImageContentMode()
-        self.removeButton.setImageContentMode()
+        selectionStyle = .none
+        addButton.setImageContentMode()
+        removeButton.setImageContentMode()
     }
     
     // MARK: - Custom Action Methods
     
     @IBAction func addAction(_ sender: Any) {
-        self.delegate?.incrementCount(self.tag)
+        delegate?.incrementCount(tag)
     }
     
     @IBAction func removeAction(_ sender: Any) {
-        self.delegate?.decrementCount(self.tag)
+        delegate?.decrementCount(tag)
     }
     
     // MARK: - Setup Helper
     
     func setup(info: ProductInfo, delegate: ChangeCountProtocol?, index: Int) {
         if let imageData = info.image {
-            self.productImageView.image = UIImage(data: imageData)
+            productImageView.image = UIImage(data: imageData)
         }
         else {
-            self.productImageView.image = UIImage(named: "bag")
+            productImageView.image = UIImage(named: "bag")
         }
-        self.priceLabel.text = info.price + " (" + info.quantity + ")"
-        self.counterLabel.text = info.totalPrice
+        priceLabel.text = info.price + " (" + info.quantity + ")"
+        counterLabel.text = info.totalPrice
         self.delegate = delegate
-        self.tag = index
+        tag = index
     }
+    
 }
 
 

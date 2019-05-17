@@ -14,22 +14,16 @@ private let MINIMUM_ALLOWED_COUNT = 0
 final class ProductsViewModel: ListViewModel {
     
     fileprivate var products = [Product]() {
-        didSet {
-            self.updateUI()
-        }
+        didSet { updateUI() }
     }
     
     private var updateUI: ViewModelCallback!
     
-    var productCount: Int {
-        return products.count
-    }
+    var productCount: Int { return products.count }
     var totalPrice: Double {
         return products.reduce(0.0) {$0 + (($1.quantity > 0) ? Double($1.price) * Double($1.quantity) : 0.0) }
     }
-    var totalPriceString: String {
-        return String.init(format: "$%.2f", totalPrice)
-    }
+    var totalPriceString: String { return String(format: "$%.2f", totalPrice) }
     
     fileprivate var service: ServiceManager!
     fileprivate var coreData: CoreDataManager!
@@ -43,7 +37,7 @@ final class ProductsViewModel: ListViewModel {
     }
     
     func setCallback(_ callback: @escaping ViewModelCallback) {
-        self.updateUI = callback
+        updateUI = callback
     }
 }
 
@@ -52,42 +46,41 @@ final class ProductsViewModel: ListViewModel {
 extension ProductsViewModel {
     
     func reload() {
-        self.coreData.reload()
-        self.updateUI()
+        coreData.reload()
+        updateUI()
     }
     
     /// Get images from Cart
     /// Only show items in ShoppingCart screen, with counts > 0
     /// Does not perform callback for UI
     func loadFromCart() {
-        self.products = self.service.fetchProductsFromCart().filter { $0.quantity > 0 }
+        products = service.fetchProductsFromCart().filter { $0.quantity > 0 }
     }
     
     func loadProducts(_ success: @escaping ()->(),
                       _ failure: @escaping ()->()) {
         let productSuccess: ([Product])->() = { [weak self] products in
             success()
-            self?.products = products
+            guard let strSelf = self else { return }
+            strSelf.products = products
         }
-        self.service.fetchProducts(productSuccess, failure)
+        service.fetchProducts(productSuccess, failure)
     }
     
     /// simulates a long-running API call to perform payment operation
     func performPayment(_ completion: @escaping ()->()) {
         DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak self] in
-            guard let products = self?.products else {
-                completion()
-                return
-            }
+            guard let strSelf = self else { completion() ; return }
             
-            for product in products {
+            for product in strSelf.products {
                 product.quantity = 0
             }
             
-            self?.coreData.save()
+            strSelf.coreData.save()
             completion()
         }
     }
+    
 }
 
 // MARK: - Individual Product Info/Image Accessors
@@ -95,11 +88,11 @@ extension ProductsViewModel {
 extension ProductsViewModel {
     
     func productCount(at index: Int) -> Int {
-        return Int(self.products[index].quantity)
+        return Int(products[index].quantity)
     }
     
     func productInfo(at index: Int) -> ProductInfo {
-        let product = self.products[index]
+        let product = products[index]
         
         let imageData = (product.image != nil) ? Data(referencing: product.image!) : nil
         let nameStr = product.name
@@ -115,7 +108,7 @@ extension ProductsViewModel {
     }
     
     func getImage(at index: Int, _ completion: @escaping (Data)->()) {
-        let product = self.products[index]
+        let product = products[index]
         if product.image == nil {
             self.service.fetchImage(product) {
                 DispatchQueue.main.async {
@@ -140,31 +133,31 @@ extension ProductsViewModel: ChangeCountProtocol {
     
     /// Increment the quantity, but do nothing if count would exceed MAXIMUM_ALLOWED_COUNT
     func incrementCount(_ index: Int) {
-        let product = self.products[index]
+        let product = products[index]
         if product.quantity < MAXIMUM_ALLOWED_COUNT {
             product.quantity += 1
         }
         
         // create cart if necessary, add item to cart
         if (product.cart == nil) {
-            product.cart = self.coreData.getShoppingCart()
+            product.cart = coreData.getShoppingCart()
         }
-        self.coreData.save()
+        coreData.save()
     }
     
     /// Decrement the quantity, but do nothing if count would be below MINIMUM_ALLOWED_COUNT
     func decrementCount(_ index: Int) {
-        let product = self.products[index]
+        let product = products[index]
         if product.quantity > MINIMUM_ALLOWED_COUNT {
             product.quantity -= 1
         }
         
         // create cart if necessary, add item to cart
         if (product.cart == nil) {
-            product.cart = self.coreData.getShoppingCart()
+            product.cart = coreData.getShoppingCart()
         }
         
-        self.coreData.save()
+        coreData.save()
     }
     
 }

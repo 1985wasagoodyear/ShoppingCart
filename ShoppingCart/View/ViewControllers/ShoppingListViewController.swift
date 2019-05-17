@@ -18,42 +18,41 @@ final class ShoppingListViewController: UIViewController {
     // MARK: - Properties
     
     private var viewModel: (ListViewModel & ChangeCountProtocol)! {
-        didSet {
-            self.loadProducts()
-        }
+        didSet { loadProducts() }
     }
     
     // MARK: - Lifecycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupCollectionView()
+        setupCollectionView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.viewModel.reload()
+        viewModel.reload()
     }
 
     // MARK: - Setup
     
     func setupCollectionView() {
-        self.collectionView.delegate = self
-        self.collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.dataSource = self
         let nib = UINib(nibName: ProductCollectionViewCell.name,
                         bundle: nil)
-        self.collectionView.register(nib,
-                                     forCellWithReuseIdentifier: ProductCollectionViewCell.name)
+        collectionView.register(nib,
+                                forCellWithReuseIdentifier: ProductCollectionViewCell.name)
     }
     
-    func setViewModel(_ viewModel: (ChangeCountProtocol & ListViewModel)) {
-        let callback: ViewModelCallback = { [weak self] in
-            DispatchQueue.main.async {
-                self?.collectionView.reloadData()
+    func setViewModel(_ newVM: (ChangeCountProtocol & ListViewModel)) {
+        let callback: ViewModelCallback = {
+            DispatchQueue.main.async { [weak self] in
+                guard let strSelf = self else { return }
+                strSelf.collectionView.reloadData()
             }
         }
-        self.viewModel = viewModel
-        self.viewModel.setCallback(callback)
+        viewModel = newVM
+        viewModel.setCallback(callback)
     }
 
     private func loadProducts() {
@@ -65,14 +64,16 @@ final class ShoppingListViewController: UIViewController {
         self.loadingIndicator.startAnimating()
         self.viewModel.loadProducts({
             DispatchQueue.main.async { [weak self] in
-                self?.loadingIndicator.stopAnimating()
-                self?.loadingIndicator.removeFromSuperview()
-                self?.loadingIndicator = nil
+                guard let strSelf = self else { return }
+                strSelf.loadingIndicator.stopAnimating()
+                strSelf.loadingIndicator.removeFromSuperview()
+                strSelf.loadingIndicator = nil
             }
         }) { [weak self] in
-            self?.loadingIndicator.stopAnimating()
-            self?.loadingIndicator.removeFromSuperview()
-            self?.loadingIndicator = nil
+            guard let strSelf = self else { return }
+            strSelf.loadingIndicator.stopAnimating()
+            strSelf.loadingIndicator.removeFromSuperview()
+            strSelf.loadingIndicator = nil
             // show some error here...?
         }
     }
@@ -85,7 +86,7 @@ extension ShoppingListViewController: UICollectionViewDataSource, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.viewModel.productCount
+        return viewModel.productCount
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -93,14 +94,15 @@ extension ShoppingListViewController: UICollectionViewDataSource, UICollectionVi
         
         let row = indexPath.row
         
-        let productInfo = self.viewModel.productInfo(at: row)
+        let productInfo = viewModel.productInfo(at: row)
         cell.setup(info: productInfo,
                    delegate: self,
                    index: row)
         
         if productInfo.image == nil {
-            self.viewModel.getImage(at: row) { [weak self] image in
-                self?.reloadCell(at: row)
+            viewModel.getImage(at: row) { [weak self] image in
+                guard let strSelf = self else { return }
+                strSelf.reloadCell(at: row)
             }
         }
         
@@ -112,18 +114,18 @@ extension ShoppingListViewController: UICollectionViewDataSource, UICollectionVi
 extension ShoppingListViewController: ChangeCountProtocol {
     
     func incrementCount(_ index: Int) {
-        self.viewModel.incrementCount(index)
-        self.reloadCell(at: index)
+        viewModel.incrementCount(index)
+        reloadCell(at: index)
     }
     
     func decrementCount(_ index: Int) {
-        self.viewModel.decrementCount(index)
-        self.reloadCell(at: index)
+        viewModel.decrementCount(index)
+        reloadCell(at: index)
     }
     
     private func reloadCell(at index: Int) {
         UIView.setAnimationsEnabled(false)
-        self.collectionView.performBatchUpdates({[unowned self] in
+        collectionView.performBatchUpdates({
             self.collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
         }) { (finished) in
             if (finished == true) {

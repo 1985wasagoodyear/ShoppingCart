@@ -42,12 +42,12 @@ final class ProductPaymentCoordinator: Coordinator {
 extension ProductPaymentCoordinator: PaymentNavigationDelegate {
     
     func finishPaymentFlow(sender: UIViewController) {
-        self.paymentNavDelegate.finishPaymentFlow(sender: sender)
+        paymentNavDelegate.finishPaymentFlow(sender: sender)
         finish()
     }
     
     func cancelPaymentFlow(sender: UIViewController) {
-        self.paymentNavDelegate.cancelPaymentFlow(sender: sender)
+        paymentNavDelegate.cancelPaymentFlow(sender: sender)
         finish()
     }
 }
