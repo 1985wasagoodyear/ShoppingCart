@@ -71,7 +71,6 @@ private final class HETableView {
                 animations: {
                     cell.transform = CGAffineTransform(translationX: 0, y: 0)
             }, completion: { (completed) in
-                print("did slide in")
                 if (completed) { completion?() }
             })
         }

@@ -34,13 +34,21 @@ final class ProductTabBarController: UITabBarController {
     // MARK: - UI for Payment Confirmation
     
     private func determineIfShowMessage() {
-        if paidState == .paid {
-            showToast("Thank you for your purchase!")
+        if paidState == .unknown { return }
+        defer { paidState = .unknown }
+        
+        let message: String
+        switch paidState {
+            case .paid:
+                message = "Thank you for your purchase!"
+            case .cancelled:
+                message = "Payment cancelled"
+            case .unknown:
+                return
+            default:
+                message = "Error - Payment error occurred"
         }
-        else if paidState == .cancelled {
-            showToast("Payment cancelled")
-        }
-        paidState = .unknown
+        showToast(message)
     }
     
     private func showToast(_ message: String) {

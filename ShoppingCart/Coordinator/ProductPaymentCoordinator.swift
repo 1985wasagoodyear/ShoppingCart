@@ -30,6 +30,7 @@ final class ProductPaymentCoordinator: Coordinator {
         let vm = ProductsViewModel(manager: coreData, service: service)
         vc.setViewModel(vm)
         vc.paymentNavDelegate = self
+        vc.modalPresentationStyle = .overCurrentContext
         rootVC.present(vc, animated: true, completion: nil)
     }
     

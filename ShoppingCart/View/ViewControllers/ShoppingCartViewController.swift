@@ -150,7 +150,7 @@ extension ShoppingCartViewController: ChangeCountProtocol {
         if #available(iOS 11.0, *) {
             let indices = [IndexPath(row: index, section: 0)]
             if tableView.numberOfRows(inSection: 0) == viewModel.productCount {
-                tableView.reloadRows(at: indices, with: .fade)
+                tableView.reloadRows(at: indices, with: .none)
             }
             else {
                 tableView.beginUpdates()
