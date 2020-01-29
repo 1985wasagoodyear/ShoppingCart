@@ -52,10 +52,10 @@ final class ProductTabBarCoordinator: Coordinator {
 
 }
 
-
 extension ProductTabBarCoordinator: PaymentNavigationDelegate {
     func startPaymentFlow() {
-        let newCoordinator = ProductPaymentCoordinator(rootVC: rootVC, parent: self,
+        let newCoordinator = ProductPaymentCoordinator(rootVC: rootVC,
+                                                       parent: self,
                                                        coreData: coreData, service: service)
         newCoordinator.paymentNavDelegate = self
         newCoordinator.start()

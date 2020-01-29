@@ -74,6 +74,7 @@ final class ShoppingListViewController: UIViewController {
             // show some error here...?
         }
     }
+    
 }
 
 extension ShoppingListViewController: UICollectionViewDataSource, UICollectionViewDelegate {
@@ -88,7 +89,6 @@ extension ShoppingListViewController: UICollectionViewDataSource, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductCollectionViewCell.name, for: indexPath) as! ProductCollectionViewCell
-        
         let row = indexPath.row
         
         let productInfo = viewModel.productInfo(at: row)
@@ -102,11 +102,9 @@ extension ShoppingListViewController: UICollectionViewDataSource, UICollectionVi
                 strSelf.reloadCell(at: row)
             }
         }
-        
         return cell
     }
 }
-
 
 extension ShoppingListViewController: ChangeCountProtocol {
     

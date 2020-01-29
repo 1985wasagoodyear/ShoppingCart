@@ -31,12 +31,18 @@ final class ShoppingCartViewController: UIViewController {
     
     private var viewModel: (ListViewModel & ChangeCountProtocol)!
     weak var paymentNavDelegate: PaymentNavigationDelegate!
+    var animationDone = Set<IndexPath>()
     
     // MARK: - Lifecycle Methods
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.loadFromCart()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        animationDone.removeAll(keepingCapacity: true)
     }
     
     // MARK: - Setup Methods
@@ -99,9 +105,13 @@ extension ShoppingCartViewController: UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.section == 0 {
-            tableView.slideInAnimation(duration: 0.5, delay: 0.05,
-                                       for: cell, at: indexPath)
+        guard indexPath.section == 0,
+            !animationDone.contains(indexPath) else {
+            return
+        }
+        tableView.slideInAnimation(duration: 0.5, delay: 0.05,
+                                   for: cell, at: indexPath) {
+                                    self.animationDone.insert(indexPath)
         }
     }
     

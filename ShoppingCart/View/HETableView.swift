@@ -19,9 +19,10 @@ extension UITableView {
     open func slideInAnimation(duration durationFactor: TimeInterval,
                                delay delayFactor: TimeInterval,
                                for cell: UITableViewCell,
-                               at indexPath: IndexPath) {
+                               at indexPath: IndexPath,
+                               _ completion: (()->Void)?) {
         let animation = HETableView.makeSlideIn(duration: durationFactor,
-                                                delayFactor: delayFactor)
+                                                delayFactor: delayFactor, completion)
         let animator = Animator(animation: animation)
         animator.animate(cell: cell, at: indexPath, in: self)
     }
@@ -29,15 +30,21 @@ extension UITableView {
 
 private final class HETableView {
     
-    public class func performAnimation(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    public class func performAnimation(_ tableView: UITableView,
+                                       willDisplay cell: UITableViewCell,
+                                       forRowAt indexPath: IndexPath,
+                                       _ completion: (()->Void)?) {
         
         //let animation = makeMoveUpWithBounce(rowHeight: cell.frame.height, duration: 1.0, delayFactor: 0.05)
-        let animation = HETableView.makeSlideIn(duration: 0.5, delayFactor: 0.05)
+        let animation = HETableView.makeSlideIn(duration: 0.5, delayFactor: 0.05, completion)
         let animator = Animator(animation: animation)
         animator.animate(cell: cell, at: indexPath, in: tableView)
     }
     
-    static func makeMoveUpWithBounce(rowHeight: CGFloat, duration: TimeInterval, delayFactor: Double) -> Animation {
+    static func makeMoveUpWithBounce(rowHeight: CGFloat,
+                                     duration: TimeInterval,
+                                     delayFactor: Double,
+                                     _ completion: (()->Void)?) -> Animation {
         return { cell, indexPath, tableView in
             cell.transform = CGAffineTransform(translationX: 0, y: rowHeight)
             
@@ -53,7 +60,7 @@ private final class HETableView {
         }
     }
     
-    static func makeSlideIn(duration: TimeInterval, delayFactor: Double) -> Animation {
+    static func makeSlideIn(duration: TimeInterval, delayFactor: Double, _ completion: (()->Void)?) -> Animation {
         return { cell, indexPath, tableView in
             cell.transform = CGAffineTransform(translationX: tableView.bounds.width, y: 0)
             
@@ -63,6 +70,9 @@ private final class HETableView {
                 options: [.curveEaseInOut],
                 animations: {
                     cell.transform = CGAffineTransform(translationX: 0, y: 0)
+            }, completion: { (completed) in
+                print("did slide in")
+                if (completed) { completion?() }
             })
         }
     }

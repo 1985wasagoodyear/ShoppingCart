@@ -13,6 +13,41 @@ enum Result<T> {
     case error(Error)
 }
 
+class SafeSet<T:Hashable> {
+    
+    private var _set: Set<T>
+    private var queue: DispatchQueue
+    
+    required init() {
+        _set = Set<T>()
+        queue = DispatchQueue(label: "safeSet")
+    }
+    
+    convenience init(_ items: [T]) {
+        self.init()
+        _set = Set(items)
+        
+    }
+    convenience init(_ items: Set<T>) {
+        self.init()
+        _set = items
+    }
+    
+    @discardableResult
+    func remove(_ item: T) -> T? {
+        return queue.sync(flags: .barrier) { _set.remove(item) }
+    }
+    
+    @discardableResult
+    func insert(_ newVal: T) -> (inserted: Bool, memberAfterInsert: T) {
+        return queue.sync(flags: .barrier) { _set.insert(newVal) }
+    }
+    
+    func contains(_ value: T) -> Bool {
+        return queue.sync(flags: .barrier) {  _set.contains(value) }
+    }
+}
+
 typealias ResultCompletion = (Result<[Product]>)->()
 
 class ServiceManager {
@@ -22,7 +57,8 @@ class ServiceManager {
     
     // small Cache-like to keep track of what objects are currently being fetched
     // avoid redundant fetching of images
-    private var currentlyFetching = Set<String>()
+    // should this just be an NSCache?
+    private var currentlyFetching = SafeSet<String>()
     
     init(manager: CoreDataManager,
          queue: DispatchQueue = DispatchQueue.global(qos: .background)) {

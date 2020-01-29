@@ -11,8 +11,7 @@ import UIKit
 /* debug flags */
 
 /// if true, delete all items on startup
-fileprivate let DELETE_ON_START = false
-
+private let DELETE_ON_START = false
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -38,6 +37,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // save data somewhere(?)
     }
 
-
 }
-
