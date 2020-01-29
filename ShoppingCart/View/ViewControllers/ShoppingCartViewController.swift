@@ -55,6 +55,7 @@ final class ShoppingCartViewController: UIViewController {
                 let prodsExist = strSelf.viewModel.productCount > 0
                 strSelf.payNowButton.isEnabled = prodsExist
                 strSelf.payNowButton.alpha = prodsExist ? 1.0 : 0.5
+                print("There are \(strSelf.viewModel.productCount) items avialable")
             }
         }
         viewModel = newVM

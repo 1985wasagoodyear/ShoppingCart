@@ -56,17 +56,20 @@ extension ProductTabBarCoordinator: PaymentNavigationDelegate {
     func startPaymentFlow() {
         let newCoordinator = ProductPaymentCoordinator(rootVC: rootVC,
                                                        parent: self,
-                                                       coreData: coreData, service: service)
+                                                       coreData: coreData,
+                                                       service: service)
         newCoordinator.paymentNavDelegate = self
         newCoordinator.start()
         addChildCoordinator(newCoordinator)
     }
     func finishPaymentFlow(sender: UIViewController) {
-        rootVC.finishPaymentFlow()
-        sender.dismiss(animated: true, completion: nil)
+        sender.dismiss(animated: true) {
+            self.rootVC.finishPaymentFlow()
+        }
     }
     func cancelPaymentFlow(sender: UIViewController) {
-        rootVC.cancelPaymentFlow()
-        sender.dismiss(animated: true, completion: nil)
+        sender.dismiss(animated: true) {
+            self.rootVC.cancelPaymentFlow()
+        }
     }
 }

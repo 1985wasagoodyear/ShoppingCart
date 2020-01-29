@@ -54,17 +54,17 @@ final class CoreDataManager {
     
     // MARK: - Core Data Saving support
     
-    func save() {
-        saveMainContext()
+    func save(_ completion: (()->Void)? = nil) {
+        saveMainContext(completion)
     }
     
-    private func saveMainContext() {
+    private func saveMainContext(_ completion: (()->Void)? = nil) {
         let context = mainContext
         context.perform {
             if context.hasChanges {
                 do {
                     try context.save()
-                    self.saveBackgroundContext()
+                    self.saveBackgroundContext(completion)
                 } catch {
                     let nserror = error as NSError
                     fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
@@ -73,12 +73,14 @@ final class CoreDataManager {
         }
     }
     
-    private func saveBackgroundContext() {
+    private func saveBackgroundContext(_ completion: (()->Void)? = nil) {
         let context = backgroundContext
         if context.hasChanges {
             context.performAndWait {
                 do {
                     try context.save()
+                    print("did save to background")
+                    completion?()
                 } catch {
                     let nserror = error as NSError
                     fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
@@ -129,15 +131,24 @@ extension CoreDataManager {
         return cart
     }
     
-    func getShoppingCart() -> Cart {
+    func getShoppingCart(_ completion: @escaping (Cart) -> Void) {
         let context = mainContext
-        let fetch = NSFetchRequest<Cart>(entityName: "Cart")
-        do {
-            if let cart = try context.fetch(fetch).first { return cart }
+        mainContext.perform {
+            let cart: Cart
+            defer { completion(cart) }
+            
+            let fetch = NSFetchRequest<Cart>(entityName: "Cart")
+            do {
+                if let c = try context.fetch(fetch).first {
+                    cart = c
+                } else {
+                    cart = self.newCart(in: context)
+                }
+            } catch {
+                fatalError("Error fetching Cart from Persistent Store")
+            }
+            completion(cart)
         }
-        catch { print("Error fetching Cart from Persistent Store") }
-        
-        return newCart(in: context)
     }
 }
 

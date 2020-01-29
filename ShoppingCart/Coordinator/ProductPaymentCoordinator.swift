@@ -31,6 +31,7 @@ final class ProductPaymentCoordinator: Coordinator {
         vc.setViewModel(vm)
         vc.paymentNavDelegate = self
         vc.modalPresentationStyle = .overCurrentContext
+        rootVC.modalPresentationStyle = .overCurrentContext
         rootVC.present(vc, animated: true, completion: nil)
     }
     

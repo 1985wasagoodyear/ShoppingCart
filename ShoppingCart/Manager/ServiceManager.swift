@@ -67,26 +67,26 @@ class ServiceManager {
     }
     
     // for showing only items in the cart
-    func fetchProductsFromCart() -> [Product] {
-        if let products = self.manager.getShoppingCart().products {
-            return products.allObjects as! [Product]
+    func fetchProductsFromCart(_ completion: @escaping ([Product])->Void) {
+        self.manager.getShoppingCart() { cart in
+            let products = cart.products?.allObjects as? [Product]
+            completion(products ?? [])
         }
-        else { return [] }
     }
     
-    func fetchProducts(_ success: @escaping ([Product])->(),
-                       _ failure: @escaping ()->()) {
+    func fetchProducts(_ success: (([Product])->())?,
+                       _ failure: (()->())?) {
         let downloadTask = { [unowned self] in
             // arbitrarily download data from some service
             guard let data = ProductServiceFactory.defaultProductData() else {
-                failure() ; return
+                failure?(); return
             }
             
             // transform json response into products in background context
             self.manager.saveProducts(data)
             
             // get products on main context and return
-            success(self.manager.getProducts() ?? [])
+            success?(self.manager.getProducts() ?? [])
         }
         
         queue.asyncAfter(deadline: .now() + 1.5,

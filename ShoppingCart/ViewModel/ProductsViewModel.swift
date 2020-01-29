@@ -54,13 +54,20 @@ extension ProductsViewModel {
     /// Only show items in ShoppingCart screen, with counts > 0
     /// Does not perform callback for UI
     func loadFromCart() {
-        products = service.fetchProductsFromCart().filter { $0.quantity > 0 }
+        service.fetchProductsFromCart { (prods) in
+            self.products = prods.filter { $0.quantity > 0 }
+            print("done fetching")
+        }
     }
     
-    func loadProducts(_ success: @escaping ()->(),
-                      _ failure: @escaping ()->()) {
+    func loadProducts() {
+        self.loadProducts(nil, nil)
+    }
+    
+    func loadProducts(_ success: (()->())?,
+                      _ failure: (()->())?) {
         let productSuccess: ([Product])->() = { [weak self] products in
-            success()
+            success?()
             guard let strSelf = self else { return }
             strSelf.products = products
         }
@@ -76,8 +83,13 @@ extension ProductsViewModel {
                 product.quantity = 0
             }
             
-            strSelf.coreData.save()
-            completion()
+            strSelf.coreData.save {
+                completion()
+                print("now fetching new items")
+                strSelf.service.fetchProductsFromCart { (prods) in
+                    strSelf.products = prods
+                }
+            }
         }
     }
     
@@ -138,11 +150,7 @@ extension ProductsViewModel: ChangeCountProtocol {
             product.quantity += 1
         }
         
-        // create cart if necessary, add item to cart
-        if (product.cart == nil) {
-            product.cart = coreData.getShoppingCart()
-        }
-        coreData.save()
+        setCartIfNeeded(product)
     }
     
     /// Decrement the quantity, but do nothing if count would be below MINIMUM_ALLOWED_COUNT
@@ -152,12 +160,20 @@ extension ProductsViewModel: ChangeCountProtocol {
             product.quantity -= 1
         }
         
+        setCartIfNeeded(product)
+    }
+    
+    func setCartIfNeeded(_ product: Product) {
         // create cart if necessary, add item to cart
-        if (product.cart == nil) {
-            product.cart = coreData.getShoppingCart()
+        if (product.cart != nil) {
+            coreData.save()
+            return
+        } else {
+            coreData.getShoppingCart { (cart) in
+                product.cart = cart
+                self.coreData.save()
+            }
         }
-        
-        coreData.save()
     }
     
 }

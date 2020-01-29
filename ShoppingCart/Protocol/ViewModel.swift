@@ -8,7 +8,7 @@
 
 import Foundation
 
-typealias ViewModelCallback = ()->()
+typealias ViewModelCallback = () -> Void
 
 protocol ViewModel: class {
     func setCallback(_ callback: @escaping ViewModelCallback)
@@ -22,8 +22,8 @@ protocol ListViewModel: ViewModel {
     
     func reload()
     func loadFromCart()
-    func loadProducts(_ success: @escaping ()->(),
-                      _ failure: @escaping ()->())
+    func loadProducts(_ success: (()->())?,
+                      _ failure: (()->())?)
     
     func performPayment(_ completion: @escaping ()->())
     

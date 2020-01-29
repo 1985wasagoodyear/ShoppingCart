@@ -18,7 +18,11 @@ final class ProductTabBarController: UITabBarController {
     
     // MARK: - Properties
     
-    private var paidState: ProductPaidState = .unknown
+    private var paidState: ProductPaidState = .unknown {
+        didSet {
+            determineIfShowMessage()
+        }
+    }
     
     // MARK: - Lifecycle Methods
     
@@ -26,9 +30,8 @@ final class ProductTabBarController: UITabBarController {
         super.viewDidLoad()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        determineIfShowMessage()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     // MARK: - UI for Payment Confirmation
@@ -45,8 +48,8 @@ final class ProductTabBarController: UITabBarController {
                 message = "Payment cancelled"
             case .unknown:
                 return
-            default:
-                message = "Error - Payment error occurred"
+           // default:
+           //     message = "Error - Payment error occurred"
         }
         showToast(message)
     }
@@ -54,7 +57,6 @@ final class ProductTabBarController: UITabBarController {
     private func showToast(_ message: String) {
         guard let vcs = viewControllers, vcs.count > selectedIndex else {
             return
-            
         }
         let currentVC = vcs[selectedIndex]
         currentVC.showAlert(text: message)
